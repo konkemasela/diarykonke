@@ -6,10 +6,10 @@ import { NotFoundPage } from "./pages/NotFoundPage";
 import { createSampleEntries, dateKey, type DiaryEntry } from "./diary";
 
 const STORAGE_KEY = "global_saving_diary_entries";
-const PIN_HASH = "d9e0eafe361439498b8ecbbd7ecb6a4d1b7c5bfc2f915a40e2a9787d6d12ff27";
+const PASSWORD_HASH = "66b8965a461058bb5610e9f588502c2035da91ebd6bb21814ad970f195597753";
 
-const hashPin = async (value: string) => {
-  const bytes = new TextEncoder().encode(value);
+const hashPassword = async (value: string) => {
+  const bytes = new TextEncoder().encode(value.trim());
   const digest = await crypto.subtle.digest("SHA-256", bytes);
   return Array.from(new Uint8Array(digest))
     .map((byte) => byte.toString(16).padStart(2, "0"))
@@ -105,7 +105,7 @@ export default function App() {
   const editingEntry = entries.find((entry) => entry.id === editId);
 
   if (pathname === "/auth") {
-    return <AuthPage goTo={goTo} hashPin={hashPin} expectedPinHash={PIN_HASH} />;
+    return <AuthPage goTo={goTo} hashPassword={hashPassword} expectedPasswordHash={PASSWORD_HASH} />;
   }
 
   if (pathname === "/diary/new-entry") {

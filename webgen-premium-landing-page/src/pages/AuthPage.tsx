@@ -1,41 +1,41 @@
 import { LockKeyhole, ShieldCheck } from "lucide-react";
 import { useState } from "react";
 
-const PIN = "55055";
+const PASSWORD = "Wenzokuhle Kunene";
 const USER_NAME = "Konke'okuhle Masela";
 
 export function AuthPage({
   goTo,
-  hashPin,
-  expectedPinHash,
+  hashPassword,
+  expectedPasswordHash,
 }: {
   goTo: (path: string) => void;
-  hashPin: (value: string) => Promise<string>;
-  expectedPinHash: string;
+  hashPassword: (value: string) => Promise<string>;
+  expectedPasswordHash: string;
 }) {
-  const [pinInput, setPinInput] = useState("");
-  const [pinError, setPinError] = useState("");
+  const [passwordInput, setPasswordInput] = useState("");
+  const [passwordError, setPasswordError] = useState("");
   const [isChecking, setIsChecking] = useState(false);
 
   const handleUnlock = async (event: React.FormEvent) => {
     event.preventDefault();
 
-    if (pinInput.length !== PIN.length) {
-      setPinError("bro, the PIN needs all 5 digits, no cap");
+    if (!passwordInput.trim()) {
+      setPasswordError("bro, the password can't be empty");
       return;
     }
 
     setIsChecking(true);
-    const inputHash = await hashPin(pinInput);
+    const inputHash = await hashPassword(passwordInput);
     setIsChecking(false);
 
-    if (inputHash === expectedPinHash) {
-      setPinError("");
+    if (inputHash === expectedPasswordHash) {
+      setPasswordError("");
       goTo("/diary/home");
       return;
     }
 
-    setPinError("nah fam, that PIN ain't it. Try again and keep it real.");
+    setPasswordError("nah fam, that password ain't it. Try again and keep it real.");
   };
 
   return (
@@ -54,27 +54,25 @@ export function AuthPage({
           <label className="block">
             <span className="mb-2 flex items-center gap-2 text-xs font-semibold uppercase tracking-[0.24em] text-[#a1a1aa]">
               <LockKeyhole className="h-3.5 w-3.5" />
-              Enter PIN
+              Enter password
             </span>
             <input
               type="password"
-              inputMode="numeric"
-              maxLength={5}
-              value={pinInput}
-              onChange={(event) => setPinInput(event.target.value.replace(/\D/g, ""))}
-              className="w-full rounded-2xl border border-[#303036] bg-[#17181b] px-4 py-3 text-center text-2xl tracking-[0.6em] text-white outline-none ring-0 placeholder:text-[#6b7280] focus:border-[#8b5cf6]"
-              placeholder="the code is my dad's number, but you won't guess it 😎"
+              value={passwordInput}
+              onChange={(event) => setPasswordInput(event.target.value)}
+              className="w-full rounded-2xl border border-[#303036] bg-[#17181b] px-4 py-3 text-center text-lg text-white outline-none ring-0 placeholder:text-[#6b7280] focus:border-[#8b5cf6]"
+              placeholder="Wenzokuhle Kunene"
             />
           </label>
 
-          {pinError ? <p className="text-sm text-red-400">{pinError}</p> : null}
+          {passwordError ? <p className="text-sm text-red-400">{passwordError}</p> : null}
 
           <button
             type="submit"
             disabled={isChecking}
             className="btn-shine w-full rounded-full bg-[linear-gradient(135deg,#f8d98f_0%,#f4b1c8_45%,#b99cff_100%)] px-4 py-3 text-sm font-semibold text-[#111214] shadow-[0_14px_28px_rgba(185,156,255,0.32)] transition hover:brightness-110 disabled:cursor-not-allowed disabled:opacity-70"
           >
-            {isChecking ? "Checking the vault..." : "Get In the Crib"}
+            {isChecking ? "Checking the vault..." : "Open the diary"}
           </button>
         </form>
       </div>
