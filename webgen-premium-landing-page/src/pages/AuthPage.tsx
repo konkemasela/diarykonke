@@ -1,36 +1,59 @@
+import { LockKeyhole, ShieldCheck } from "lucide-react";
 import { useState } from "react";
 
 const PIN = "55055";
 const USER_NAME = "Konke'okuhle Masela";
 
-export function AuthPage({ goTo }: { goTo: (path: string) => void }) {
+export function AuthPage({
+  goTo,
+  hashPin,
+  expectedPinHash,
+}: {
+  goTo: (path: string) => void;
+  hashPin: (value: string) => Promise<string>;
+  expectedPinHash: string;
+}) {
   const [pinInput, setPinInput] = useState("");
   const [pinError, setPinError] = useState("");
+  const [isChecking, setIsChecking] = useState(false);
 
-  const handleUnlock = (event: React.FormEvent) => {
+  const handleUnlock = async (event: React.FormEvent) => {
     event.preventDefault();
 
-    if (pinInput === PIN) {
+    if (pinInput.length !== PIN.length) {
+      setPinError("bro, the PIN needs all 5 digits, no cap");
+      return;
+    }
+
+    setIsChecking(true);
+    const inputHash = await hashPin(pinInput);
+    setIsChecking(false);
+
+    if (inputHash === expectedPinHash) {
       setPinError("");
       goTo("/diary/home");
       return;
     }
 
-    setPinError("loool bro you got it wrong :P, better luck next time");
+    setPinError("nah fam, that PIN ain't it. Try again and keep it real.");
   };
 
   return (
     <div className="diary-shell flex min-h-screen items-center justify-center bg-[radial-gradient(circle_at_top,#0d0d0f,#050505_48%,#0b0b0d)] p-6">
       <div className="w-full max-w-md rounded-[2rem] border border-[#2f2a2d] bg-[rgba(17,18,20,0.9)] p-8 shadow-[0_30px_80px_rgba(0,0,0,0.56)] backdrop-blur-sm">
-        <p className="text-center text-[10px] font-semibold uppercase tracking-[0.38em] text-[var(--brand-gold)]">
-          KONKE
-        </p>
+        <div className="mb-4 flex items-center justify-center gap-2 text-[var(--brand-gold)]">
+          <ShieldCheck className="h-4 w-4" />
+          <p className="text-center text-[10px] font-semibold uppercase tracking-[0.38em]">
+            KONKE
+          </p>
+        </div>
         <h1 className="mt-4 text-center text-3xl font-semibold text-white">Daily Diary</h1>
         <p className="mt-3 text-center text-sm text-[#d4d4d8]">Wazzup, {USER_NAME}</p>
 
         <form onSubmit={handleUnlock} className="mt-7 space-y-5">
           <label className="block">
-            <span className="mb-2 block text-xs font-semibold uppercase tracking-[0.24em] text-[#a1a1aa]">
+            <span className="mb-2 flex items-center gap-2 text-xs font-semibold uppercase tracking-[0.24em] text-[#a1a1aa]">
+              <LockKeyhole className="h-3.5 w-3.5" />
               Enter PIN
             </span>
             <input
@@ -48,9 +71,10 @@ export function AuthPage({ goTo }: { goTo: (path: string) => void }) {
 
           <button
             type="submit"
-            className="btn-shine w-full rounded-full bg-[linear-gradient(135deg,#f8d98f_0%,#f4b1c8_45%,#b99cff_100%)] px-4 py-3 text-sm font-semibold text-[#111214] shadow-[0_14px_28px_rgba(185,156,255,0.32)] transition hover:brightness-110"
+            disabled={isChecking}
+            className="btn-shine w-full rounded-full bg-[linear-gradient(135deg,#f8d98f_0%,#f4b1c8_45%,#b99cff_100%)] px-4 py-3 text-sm font-semibold text-[#111214] shadow-[0_14px_28px_rgba(185,156,255,0.32)] transition hover:brightness-110 disabled:cursor-not-allowed disabled:opacity-70"
           >
-            Get In the Crib
+            {isChecking ? "Checking the vault..." : "Get In the Crib"}
           </button>
         </form>
       </div>

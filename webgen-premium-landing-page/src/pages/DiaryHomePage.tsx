@@ -1,5 +1,27 @@
+import {
+  Bookmark,
+  CalendarDays,
+  Download,
+  Heart,
+  Lock,
+  PenLine,
+  Search,
+  Sparkles,
+  Star,
+  Trash2,
+} from "lucide-react";
 import { useMemo, useState } from "react";
 import { buildCalendarDays, dateKey, formatDisplayDate, moodPalette, monthName, moodOptions, type DiaryEntry } from "../diary";
+
+const moodIconMap = {
+  Happy: Sparkles,
+  Calm: Heart,
+  Reflective: Star,
+  Grateful: Bookmark,
+  Sad: CalendarDays,
+  Excited: Sparkles,
+  Tired: Lock,
+} as const;
 
 export function DiaryHomePage({
   entries,
@@ -9,6 +31,8 @@ export function DiaryHomePage({
   setCalendarMonth,
   goTo,
   onDeleteEntry,
+  onToggleFavorite,
+  onToggleBookmark,
   onEditEntry,
   onExport,
 }: {
@@ -19,10 +43,13 @@ export function DiaryHomePage({
   setCalendarMonth: (date: Date) => void;
   goTo: (path: string) => void;
   onDeleteEntry: (entryId: string) => void;
+  onToggleFavorite: (entryId: string) => void;
+  onToggleBookmark: (entryId: string) => void;
   onEditEntry: (entry: DiaryEntry) => void;
   onExport: () => void;
 }) {
   const [searchQuery, setSearchQuery] = useState("");
+  const [expandedEntryId, setExpandedEntryId] = useState<string | null>(null);
 
   const filteredEntries = useMemo(() => {
     const base = [...entries]
@@ -61,6 +88,8 @@ export function DiaryHomePage({
     return {
       total: entries.length,
       thisMonth: thisMonth.length,
+      favorite: entries.filter((entry) => entry.favorite).length,
+      bookmarked: entries.filter((entry) => entry.bookmarked).length,
       dominantMood: moods.sort((a, b) => b.count - a.count)[0]?.mood ?? "Happy",
     };
   })();
@@ -147,7 +176,7 @@ export function DiaryHomePage({
 
             <div className="rounded-[2rem] border border-[#2a2a2d] bg-[#111214] p-5 shadow-[0_18px_45px_rgba(0,0,0,0.45)]">
               <h2 className="text-lg font-semibold text-white">Global stuff and watnot</h2>
-              <div className="mt-4 grid grid-cols-3 gap-3">
+              <div className="mt-4 grid grid-cols-2 gap-3">
                 <div className="rounded-2xl border border-[#303036] bg-[#17181b] p-3">
                   <p className="text-[10px] uppercase tracking-[0.24em] text-[#a1a1aa]">Entries</p>
                   <p className="mt-2 text-2xl font-semibold text-white">{stats.total}</p>
@@ -157,8 +186,12 @@ export function DiaryHomePage({
                   <p className="mt-2 text-2xl font-semibold text-white">{stats.thisMonth}</p>
                 </div>
                 <div className="rounded-2xl border border-[#303036] bg-[#17181b] p-3">
-                  <p className="text-[10px] uppercase tracking-[0.24em] text-[#a1a1aa]">Mood</p>
-                  <p className="mt-2 text-sm font-semibold text-white">{stats.dominantMood}</p>
+                  <p className="text-[10px] uppercase tracking-[0.24em] text-[#a1a1aa]">Favorites</p>
+                  <p className="mt-2 text-2xl font-semibold text-white">{stats.favorite}</p>
+                </div>
+                <div className="rounded-2xl border border-[#303036] bg-[#17181b] p-3">
+                  <p className="text-[10px] uppercase tracking-[0.24em] text-[#a1a1aa]">Bookmarks</p>
+                  <p className="mt-2 text-2xl font-semibold text-white">{stats.bookmarked}</p>
                 </div>
               </div>
 
@@ -203,7 +236,10 @@ export function DiaryHomePage({
               </div>
 
               <label className="mb-4 block">
-                <span className="mb-2 block text-xs font-semibold uppercase tracking-[0.24em] text-[#a1a1aa]">Search entries</span>
+                <span className="mb-2 flex items-center gap-2 text-xs font-semibold uppercase tracking-[0.24em] text-[#a1a1aa]">
+                  <Search className="h-3.5 w-3.5" />
+                  Search entries
+                </span>
                 <input
                   type="text"
                   value={searchQuery}
@@ -219,42 +255,100 @@ export function DiaryHomePage({
                     No entries match this vibe today.
                   </div>
                 ) : (
-                  filteredEntries.map((entry) => (
-                    <article key={entry.id} className="entry-card rounded-[1.5rem] border border-[#303036] bg-[#17181b] p-4">
-                      <div className="mb-3 flex items-center justify-between gap-2">
-                        <span className={`rounded-full border px-2.5 py-1 text-[10px] font-semibold uppercase tracking-[0.2em] ${moodPalette[entry.mood]}`}>
-                          {entry.mood}
-                        </span>
-                        <span className="text-[10px] uppercase tracking-[0.2em] text-[#a1a1aa]">
-                          {new Date(entry.createdAt).toLocaleTimeString([], { hour: "2-digit", minute: "2-digit" })}
-                        </span>
-                      </div>
+                  filteredEntries.map((entry) => {
+                    const MoodIcon = moodIconMap[entry.mood];
+                    const isExpanded = expandedEntryId === entry.id;
 
-                      <h3 className="text-xl font-semibold text-white">{entry.title}</h3>
-                      <p className="mt-2 text-sm leading-7 text-[#d4d4d8]">{entry.text}</p>
+                    return (
+                      <article key={entry.id} className="entry-card rounded-[1.5rem] border border-[#303036] bg-[#17181b] p-4">
+                        <div className="mb-3 flex items-center justify-between gap-2">
+                          <button
+                            type="button"
+                            onClick={() => setExpandedEntryId(isExpanded ? null : entry.id)}
+                            className="flex items-center gap-2 rounded-full border border-[#303036] bg-[#17181b] px-2.5 py-1.5 text-left"
+                          >
+                            <MoodIcon className="h-3.5 w-3.5 text-[var(--brand-gold)]" />
+                            <span className={`rounded-full border px-2 py-1 text-[10px] font-semibold uppercase tracking-[0.2em] ${moodPalette[entry.mood]}`}>
+                              {entry.mood}
+                            </span>
+                          </button>
 
-                      {entry.image ? (
-                        <img src={entry.image} alt={entry.title} className="mt-4 h-52 w-full rounded-[1.2rem] object-cover" />
-                      ) : null}
+                          <span className="text-[10px] uppercase tracking-[0.2em] text-[#a1a1aa]">
+                            {new Date(entry.createdAt).toLocaleTimeString([], { hour: "2-digit", minute: "2-digit" })}
+                          </span>
+                        </div>
 
-                      <div className="mt-4 flex justify-end gap-2">
                         <button
                           type="button"
-                          onClick={() => onEditEntry(entry)}
-                          className="rounded-full border border-[#303036] bg-[#17181b] px-3 py-2 text-xs font-semibold uppercase tracking-[0.2em] text-[#e5e7eb]"
+                          onClick={() => setExpandedEntryId(isExpanded ? null : entry.id)}
+                          className="w-full text-left"
                         >
-                          Edit
+                          <div className="flex items-center justify-between gap-3">
+                            <div>
+                              <p className="text-[10px] uppercase tracking-[0.2em] text-[#a1a1aa]">{formatDisplayDate(entry.date)}</p>
+                              <h3 className="mt-2 text-xl font-semibold text-white">{entry.title}</h3>
+                            </div>
+                            <span className="rounded-full border border-[#303036] bg-[#17181b] px-2 py-1 text-[10px] uppercase tracking-[0.22em] text-[#d4d4d8]">
+                              {isExpanded ? "Hide" : "Open"}
+                            </span>
+                          </div>
                         </button>
-                        <button
-                          type="button"
-                          onClick={() => onDeleteEntry(entry.id)}
-                          className="rounded-full border border-red-500/40 bg-red-500/10 px-3 py-2 text-xs font-semibold uppercase tracking-[0.2em] text-red-200"
-                        >
-                          Delete
-                        </button>
-                      </div>
-                    </article>
-                  ))
+
+                        {isExpanded ? (
+                          <div className="mt-4 space-y-4">
+                            <p className="text-sm leading-7 text-[#d4d4d8]">{entry.text}</p>
+
+                            {entry.image ? (
+                              <img src={entry.image} alt={entry.title} className="h-52 w-full rounded-[1.2rem] object-cover" />
+                            ) : null}
+                          </div>
+                        ) : null}
+
+                        <div className="mt-4 flex flex-wrap items-center justify-end gap-2">
+                          <button
+                            type="button"
+                            onClick={() => onToggleBookmark(entry.id)}
+                            className={`inline-flex items-center gap-2 rounded-full border px-3 py-2 text-[10px] font-semibold uppercase tracking-[0.2em] ${
+                              entry.bookmarked
+                                ? "border-amber-400/40 bg-amber-500/10 text-amber-100"
+                                : "border-[#303036] bg-[#17181b] text-[#e5e7eb]"
+                            }`}
+                          >
+                            <Bookmark className="h-3.5 w-3.5" fill={entry.bookmarked ? "currentColor" : "none"} />
+                            {entry.bookmarked ? "Bookmarked" : "Bookmark"}
+                          </button>
+                          <button
+                            type="button"
+                            onClick={() => onToggleFavorite(entry.id)}
+                            className={`inline-flex items-center gap-2 rounded-full border px-3 py-2 text-[10px] font-semibold uppercase tracking-[0.2em] ${
+                              entry.favorite
+                                ? "border-pink-400/40 bg-pink-500/10 text-pink-100"
+                                : "border-[#303036] bg-[#17181b] text-[#e5e7eb]"
+                            }`}
+                          >
+                            <Heart className="h-3.5 w-3.5" fill={entry.favorite ? "currentColor" : "none"} />
+                            {entry.favorite ? "Fav" : "Favorite"}
+                          </button>
+                          <button
+                            type="button"
+                            onClick={() => onEditEntry(entry)}
+                            className="inline-flex items-center gap-2 rounded-full border border-[#303036] bg-[#17181b] px-3 py-2 text-[10px] font-semibold uppercase tracking-[0.2em] text-[#e5e7eb]"
+                          >
+                            <PenLine className="h-3.5 w-3.5" />
+                            Edit
+                          </button>
+                          <button
+                            type="button"
+                            onClick={() => onDeleteEntry(entry.id)}
+                            className="inline-flex items-center gap-2 rounded-full border border-red-500/40 bg-red-500/10 px-3 py-2 text-[10px] font-semibold uppercase tracking-[0.2em] text-red-200"
+                          >
+                            <Trash2 className="h-3.5 w-3.5" />
+                            Delete
+                          </button>
+                        </div>
+                      </article>
+                    );
+                  })
                 )}
               </div>
             </div>

@@ -7,6 +7,8 @@ export type DiaryEntry = {
   text: string;
   mood: Mood;
   image?: string;
+  favorite?: boolean;
+  bookmarked?: boolean;
   createdAt: string;
 };
 

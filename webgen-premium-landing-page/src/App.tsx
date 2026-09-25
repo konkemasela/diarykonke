@@ -6,6 +6,15 @@ import { NotFoundPage } from "./pages/NotFoundPage";
 import { createSampleEntries, dateKey, type DiaryEntry } from "./diary";
 
 const STORAGE_KEY = "global_saving_diary_entries";
+const PIN_HASH = "d9e0eafe361439498b8ecbbd7ecb6a4d1b7c5bfc2f915a40e2a9787d6d12ff27";
+
+const hashPin = async (value: string) => {
+  const bytes = new TextEncoder().encode(value);
+  const digest = await crypto.subtle.digest("SHA-256", bytes);
+  return Array.from(new Uint8Array(digest))
+    .map((byte) => byte.toString(16).padStart(2, "0"))
+    .join("");
+};
 
 const goTo = (path: string) => {
   window.location.assign(path);
@@ -75,12 +84,28 @@ export default function App() {
     setEntries((current) => current.filter((item) => item.id !== entryId));
   };
 
+  const handleToggleFavorite = (entryId: string) => {
+    setEntries((current) =>
+      current.map((entry) =>
+        entry.id === entryId ? { ...entry, favorite: !entry.favorite } : entry,
+      ),
+    );
+  };
+
+  const handleToggleBookmark = (entryId: string) => {
+    setEntries((current) =>
+      current.map((entry) =>
+        entry.id === entryId ? { ...entry, bookmarked: !entry.bookmarked } : entry,
+      ),
+    );
+  };
+
   const pathname = window.location.pathname;
   const editId = new URLSearchParams(window.location.search).get("edit") ?? undefined;
   const editingEntry = entries.find((entry) => entry.id === editId);
 
   if (pathname === "/auth") {
-    return <AuthPage goTo={goTo} />;
+    return <AuthPage goTo={goTo} hashPin={hashPin} expectedPinHash={PIN_HASH} />;
   }
 
   if (pathname === "/diary/new-entry") {
@@ -104,6 +129,8 @@ export default function App() {
         setCalendarMonth={setCalendarMonth}
         goTo={goTo}
         onDeleteEntry={handleDeleteEntry}
+        onToggleFavorite={handleToggleFavorite}
+        onToggleBookmark={handleToggleBookmark}
         onEditEntry={(entry) => goTo(`/diary/new-entry?edit=${entry.id}`)}
         onExport={() => exportEntries(entries)}
       />
