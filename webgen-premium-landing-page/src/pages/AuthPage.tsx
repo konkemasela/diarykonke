@@ -1,11 +1,9 @@
 import { useState } from "react";
-import { useNavigate } from "react-router-dom";
 
 const PIN = "55055";
 const USER_NAME = "Konke'okuhle Masela";
 
-export function AuthPage() {
-  const navigate = useNavigate();
+export function AuthPage({ goTo }: { goTo: (path: string) => void }) {
   const [pinInput, setPinInput] = useState("");
   const [pinError, setPinError] = useState("");
 
@@ -14,7 +12,7 @@ export function AuthPage() {
 
     if (pinInput === PIN) {
       setPinError("");
-      navigate("/diary/home");
+      goTo("/diary/home");
       return;
     }
 

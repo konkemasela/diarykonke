@@ -1,4 +1,3 @@
-import { useNavigate } from "react-router-dom";
 import { buildCalendarDays, dateKey, formatDisplayDate, moodPalette, monthName, moodOptions, type DiaryEntry } from "../diary";
 
 export function DiaryHomePage({
@@ -7,14 +6,15 @@ export function DiaryHomePage({
   setSelectedDate,
   calendarMonth,
   setCalendarMonth,
+  goTo,
 }: {
   entries: DiaryEntry[];
   selectedDate: string;
   setSelectedDate: (date: string) => void;
   calendarMonth: Date;
   setCalendarMonth: (date: Date) => void;
+  goTo: (path: string) => void;
 }) {
-  const navigate = useNavigate();
   const selectedEntries = [...entries]
     .filter((entry) => entry.date === selectedDate)
     .sort((a, b) => b.createdAt.localeCompare(a.createdAt));
@@ -59,7 +59,7 @@ export function DiaryHomePage({
             </span>
             <button
               type="button"
-              onClick={() => navigate("/auth")}
+              onClick={() => goTo("/auth")}
               className="rounded-full border border-[#303036] bg-[#17181b] px-3 py-2 text-sm text-[#e5e7eb]"
             >
               Lock the crib
@@ -153,7 +153,7 @@ export function DiaryHomePage({
 
                 <button
                   type="button"
-                  onClick={() => navigate("/diary/new-entry")}
+                  onClick={() => goTo("/diary/new-entry")}
                   className="rounded-full bg-[#f5f5f5] px-5 py-3 text-sm font-semibold text-[#111214] transition hover:bg-white"
                 >
                   New entry

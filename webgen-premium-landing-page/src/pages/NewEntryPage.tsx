@@ -1,15 +1,15 @@
 import { useState } from "react";
-import { useNavigate } from "react-router-dom";
 import { moodOptions, type DiaryEntry, type Mood } from "../diary";
 
 export function NewEntryPage({
   initialDate,
   onSave,
+  goTo,
 }: {
   initialDate: string;
   onSave: (entry: DiaryEntry) => void;
+  goTo: (path: string) => void;
 }) {
-  const navigate = useNavigate();
   const [form, setForm] = useState({
     date: initialDate,
     title: "",
@@ -37,7 +37,7 @@ export function NewEntryPage({
       createdAt: new Date().toISOString(),
     });
 
-    navigate("/diary/home");
+    goTo("/diary/home");
   };
 
   const handleImageUpload = (event: React.ChangeEvent<HTMLInputElement>) => {
@@ -62,7 +62,7 @@ export function NewEntryPage({
 
           <button
             type="button"
-            onClick={() => navigate("/diary/home")}
+            onClick={() => goTo("/diary/home")}
             className="rounded-full border border-[#303036] bg-[#17181b] px-4 py-2 text-sm text-[#e5e7eb]"
           >
             Back to diary
