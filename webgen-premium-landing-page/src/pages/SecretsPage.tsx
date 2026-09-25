@@ -74,7 +74,7 @@ export function SecretsPage({
                 onChange={(event) => setPin(event.target.value.replace(/\D/g, ""))}
                 maxLength={5}
                 className="w-full rounded-2xl border border-[#303036] bg-[#17181b] px-4 py-3 text-center text-2xl tracking-[0.6em] text-white outline-none focus:border-[#8b5cf6]"
-                placeholder="55055"
+                placeholder="....."
               />
             </label>
 
