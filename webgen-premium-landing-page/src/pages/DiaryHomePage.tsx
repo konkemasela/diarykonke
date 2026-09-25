@@ -1,0 +1,198 @@
+import { buildCalendarDays, dateKey, formatDisplayDate, moodPalette, monthName, moodOptions, type DiaryEntry, type Mood } from "../diary";
+
+export function DiaryHomePage({
+  entries,
+  selectedDate,
+  setSelectedDate,
+  calendarMonth,
+  setCalendarMonth,
+  onNewEntry,
+  onLock,
+}: {
+  entries: DiaryEntry[];
+  selectedDate: string;
+  setSelectedDate: (date: string) => void;
+  calendarMonth: Date;
+  setCalendarMonth: (date: Date) => void;
+  onNewEntry: () => void;
+  onLock: () => void;
+}) {
+  const selectedEntries = [...entries]
+    .filter((entry) => entry.date === selectedDate)
+    .sort((a, b) => b.createdAt.localeCompare(a.createdAt));
+
+  const entryMap = new Map<string, DiaryEntry[]>();
+  entries.forEach((entry) => {
+    const items = entryMap.get(entry.date) ?? [];
+    items.push(entry);
+    entryMap.set(entry.date, items);
+  });
+
+  const stats = (() => {
+    const thisMonth = entries.filter((entry) => {
+      const d = new Date(entry.date + "T12:00:00");
+      return d.getMonth() === calendarMonth.getMonth() && d.getFullYear() === calendarMonth.getFullYear();
+    });
+
+    const moods = moodOptions.map((mood) => ({
+      mood,
+      count: entries.filter((entry) => entry.mood === mood).length,
+    }));
+
+    return {
+      total: entries.length,
+      thisMonth: thisMonth.length,
+      dominantMood: moods.sort((a, b) => b.count - a.count)[0]?.mood ?? "Happy",
+    };
+  })();
+
+  return (
+    <div className="min-h-screen bg-[radial-gradient(circle_at_top,#121316,#09090b_46%,#040404)] text-white">
+      <div className="mx-auto max-w-7xl px-4 py-6 sm:px-6 lg:px-8">
+        <header className="mb-6 flex flex-col gap-4 rounded-[2rem] border border-[#2a2a2d] bg-[#111214]/80 p-4 shadow-[0_20px_60px_rgba(0,0,0,0.45)] backdrop-blur-md sm:flex-row sm:items-center sm:justify-between">
+          <div>
+            <p className="text-[10px] font-semibold uppercase tracking-[0.32em] text-[#a1a1aa]">KONKE</p>
+            <h1 className="mt-2 text-2xl font-semibold text-white">Konke'okuhle Masela</h1>
+          </div>
+
+          <div className="flex items-center gap-3">
+            <span className="rounded-full border border-[#303036] bg-[#17181b] px-3 py-1 text-[10px] font-semibold uppercase tracking-[0.28em] text-[#d4d4d8]">
+              {monthName(calendarMonth)}
+            </span>
+            <button
+              type="button"
+              onClick={onLock}
+              className="rounded-full border border-[#303036] bg-[#17181b] px-3 py-2 text-sm text-[#e5e7eb]"
+            >
+              Lock the crib
+            </button>
+          </div>
+        </header>
+
+        <main className="grid gap-6 xl:grid-cols-[1.2fr_1.8fr]">
+          <section className="space-y-6">
+            <div className="rounded-[2rem] border border-[#2a2a2d] bg-[#111214] p-4 shadow-[0_18px_45px_rgba(0,0,0,0.45)] sm:p-5">
+              <div className="mb-4 flex items-center justify-between">
+                <h2 className="text-xl font-semibold text-white">Calendar</h2>
+                <div className="flex gap-2">
+                  <button
+                    type="button"
+                    onClick={() => setCalendarMonth(new Date(calendarMonth.getFullYear(), calendarMonth.getMonth() - 1, 1))}
+                    className="h-9 w-9 rounded-full border border-[#303036] bg-[#17181b] text-lg text-[#f3f4f6]"
+                  >
+                    ‹
+                  </button>
+                  <button
+                    type="button"
+                    onClick={() => setCalendarMonth(new Date(calendarMonth.getFullYear(), calendarMonth.getMonth() + 1, 1))}
+                    className="h-9 w-9 rounded-full border border-[#303036] bg-[#17181b] text-lg text-[#f3f4f6]"
+                  >
+                    ›
+                  </button>
+                </div>
+              </div>
+
+              <div className="mb-3 grid grid-cols-7 gap-2 text-center text-[10px] font-semibold uppercase tracking-[0.25em] text-[#a1a1aa]">
+                {['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat'].map((d) => (
+                  <div key={d}>{d}</div>
+                ))}
+              </div>
+
+              <div className="grid grid-cols-7 gap-2">
+                {buildCalendarDays(calendarMonth).map((day) => {
+                  const key = dateKey(day);
+                  const hasEntry = entryMap.has(key);
+                  const isCurrentMonth = day.getMonth() === calendarMonth.getMonth();
+                  const isSelected = key === selectedDate;
+
+                  return (
+                    <button
+                      key={key}
+                      type="button"
+                      onClick={() => setSelectedDate(key)}
+                      className={[
+                        "relative flex h-12 items-center justify-center rounded-xl border text-sm transition",
+                        isSelected ? "border-[#8b5cf6] bg-[#1f1b2d] text-white" : "border-[#2a2a2d] bg-[#17181b] text-[#e5e7eb]",
+                        !isCurrentMonth ? "opacity-45" : "",
+                      ].join(" ")}
+                    >
+                      {day.getDate()}
+                      {hasEntry ? (
+                        <span className="absolute bottom-1.5 h-1.5 w-1.5 rounded-full bg-[#f59e0b]" />
+                      ) : null}
+                    </button>
+                  );
+                })}
+              </div>
+            </div>
+
+            <div className="rounded-[2rem] border border-[#2a2a2d] bg-[#111214] p-5 shadow-[0_18px_45px_rgba(0,0,0,0.45)]">
+              <h2 className="text-lg font-semibold text-white">Global stuff and watnot</h2>
+              <div className="mt-4 grid grid-cols-3 gap-3">
+                <div className="rounded-2xl border border-[#303036] bg-[#17181b] p-3">
+                  <p className="text-[10px] uppercase tracking-[0.24em] text-[#a1a1aa]">Entries</p>
+                  <p className="mt-2 text-2xl font-semibold text-white">{stats.total}</p>
+                </div>
+                <div className="rounded-2xl border border-[#303036] bg-[#17181b] p-3">
+                  <p className="text-[10px] uppercase tracking-[0.24em] text-[#a1a1aa]">This month</p>
+                  <p className="mt-2 text-2xl font-semibold text-white">{stats.thisMonth}</p>
+                </div>
+                <div className="rounded-2xl border border-[#303036] bg-[#17181b] p-3">
+                  <p className="text-[10px] uppercase tracking-[0.24em] text-[#a1a1aa]">Mood</p>
+                  <p className="mt-2 text-sm font-semibold text-white">{stats.dominantMood}</p>
+                </div>
+              </div>
+            </div>
+          </section>
+
+          <section className="space-y-6">
+            <div className="rounded-[2rem] border border-[#2a2a2d] bg-[#111214] p-5 shadow-[0_18px_45px_rgba(0,0,0,0.45)] sm:p-6">
+              <div className="mb-4 flex items-center justify-between gap-3">
+                <div>
+                  <p className="text-[10px] font-semibold uppercase tracking-[0.28em] text-[#a1a1aa]">Your diary</p>
+                  <h2 className="mt-2 text-2xl font-semibold text-white">{formatDisplayDate(selectedDate)}</h2>
+                </div>
+
+                <button
+                  type="button"
+                  onClick={onNewEntry}
+                  className="rounded-full bg-[#f5f5f5] px-5 py-3 text-sm font-semibold text-[#111214] transition hover:bg-white"
+                >
+                  New entry
+                </button>
+              </div>
+
+              <div className="space-y-4">
+                {selectedEntries.length === 0 ? (
+                  <div className="rounded-[1.5rem] border border-dashed border-[#303036] bg-[#17181b] p-5 text-sm text-[#d4d4d8]">
+                    No entries yet for this day.
+                  </div>
+                ) : (
+                  selectedEntries.map((entry) => (
+                    <article key={entry.id} className="rounded-[1.5rem] border border-[#303036] bg-[#17181b] p-4">
+                      <div className="mb-3 flex items-center justify-between gap-2">
+                        <span className={`rounded-full border px-2.5 py-1 text-[10px] font-semibold uppercase tracking-[0.2em] ${moodPalette[entry.mood]}`}>
+                          {entry.mood}
+                        </span>
+                        <span className="text-[10px] uppercase tracking-[0.2em] text-[#a1a1aa]">
+                          {new Date(entry.createdAt).toLocaleTimeString([], { hour: "2-digit", minute: "2-digit" })}
+                        </span>
+                      </div>
+
+                      <h3 className="text-xl font-semibold text-white">{entry.title}</h3>
+                      <p className="mt-2 text-sm leading-7 text-[#d4d4d8]">{entry.text}</p>
+
+                      {entry.image ? (
+                        <img src={entry.image} alt={entry.title} className="mt-4 h-52 w-full rounded-[1.2rem] object-cover" />
+                      ) : null}
+                    </article>
+                  ))
+                )}
+              </div>
+            </div>
+          </section>
+        </main>
+      </div>
+    </div>
+  );
+}
