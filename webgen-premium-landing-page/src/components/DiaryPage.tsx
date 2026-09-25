@@ -204,10 +204,10 @@ export function DiaryPage() {
       <div className="flex min-h-screen items-center justify-center bg-[radial-gradient(circle_at_top,#0d0d0f,#050505_48%,#0b0b0d)] p-6">
         <div className="w-full max-w-md rounded-[2rem] border border-[#2a2a2d] bg-[#111214]/90 p-8 shadow-[0_30px_80px_rgba(0,0,0,0.5)] backdrop-blur-sm">
           <p className="text-center text-[10px] font-semibold uppercase tracking-[0.38em] text-[#a1a1aa]">
-            global saVINVING
+            Konke's Diary
           </p>
           <h1 className="mt-4 text-center text-3xl font-semibold text-white">Daily Diary</h1>
-          <p className="mt-3 text-center text-sm text-[#d4d4d8]">Welcome, {USER_NAME}</p>
+          <p className="mt-3 text-center text-sm text-[#d4d4d8]">Wazzup, {USER_NAME}</p>
 
           <form onSubmit={handleUnlock} className="mt-7 space-y-5">
             <label className="block">
@@ -231,7 +231,7 @@ export function DiaryPage() {
               type="submit"
               className="w-full rounded-full bg-[#f5f5f5] px-4 py-3 text-sm font-semibold text-[#111214] transition hover:bg-white"
             >
-              Unlock diary
+              Get In the Crib
             </button>
           </form>
         </div>
@@ -257,7 +257,7 @@ export function DiaryPage() {
               onClick={() => setIsUnlocked(false)}
               className="rounded-full border border-[#303036] bg-[#17181b] px-3 py-2 text-sm text-[#e5e7eb]"
             >
-              Lock diary
+              Lock the crib
             </button>
           </div>
         </header>
@@ -320,7 +320,7 @@ export function DiaryPage() {
             </div>
 
             <div className="rounded-[2rem] border border-[#2a2a2d] bg-[#111214] p-5 shadow-[0_18px_45px_rgba(0,0,0,0.45)]">
-              <h2 className="text-lg font-semibold text-white">Your diary pulse</h2>
+              <h2 className="text-lg font-semibold text-white">Global stuff and watnot</h2>
               <div className="mt-4 grid grid-cols-3 gap-3">
                 <div className="rounded-2xl border border-[#303036] bg-[#17181b] p-3">
                   <p className="text-[10px] uppercase tracking-[0.24em] text-[#a1a1aa]">Entries</p>
