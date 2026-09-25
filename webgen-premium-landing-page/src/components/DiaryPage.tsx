@@ -17,13 +17,13 @@ const USER_NAME = "Konke'okuhle Masela";
 const STORAGE_KEY = "global_saving_diary_entries";
 
 const moodPalette: Record<Mood, string> = {
-  Happy: "bg-amber-100 text-amber-800 border-amber-200",
-  Calm: "bg-sky-100 text-sky-800 border-sky-200",
-  Reflective: "bg-violet-100 text-violet-800 border-violet-200",
-  Grateful: "bg-emerald-100 text-emerald-800 border-emerald-200",
-  Sad: "bg-slate-200 text-slate-700 border-slate-300",
-  Excited: "bg-pink-100 text-pink-800 border-pink-200",
-  Tired: "bg-stone-200 text-stone-700 border-stone-300",
+  Happy: "bg-amber-500/10 text-amber-200 border-amber-400/30",
+  Calm: "bg-sky-500/10 text-sky-200 border-sky-400/30",
+  Reflective: "bg-violet-500/10 text-violet-200 border-violet-400/30",
+  Grateful: "bg-emerald-500/10 text-emerald-200 border-emerald-400/30",
+  Sad: "bg-slate-500/10 text-slate-200 border-slate-400/30",
+  Excited: "bg-pink-500/10 text-pink-200 border-pink-400/30",
+  Tired: "bg-stone-500/10 text-stone-200 border-stone-400/30",
 };
 
 const moodOptions: Mood[] = ["Happy", "Calm", "Reflective", "Grateful", "Sad", "Excited", "Tired"];
@@ -201,17 +201,17 @@ export function DiaryPage() {
 
   if (!isUnlocked) {
     return (
-      <div className="flex min-h-screen items-center justify-center bg-[radial-gradient(circle_at_top,#f7efe8,#efe0d0_48%,#ead7c9)] p-6">
-        <div className="w-full max-w-md rounded-[2rem] border border-[#e8d3c1] bg-[#fffaf7]/90 p-8 shadow-[0_30px_80px_rgba(71,52,43,0.12)] backdrop-blur-sm">
-          <p className="text-center text-[10px] font-semibold uppercase tracking-[0.38em] text-[#a57a61]">
+      <div className="flex min-h-screen items-center justify-center bg-[radial-gradient(circle_at_top,#0d0d0f,#050505_48%,#0b0b0d)] p-6">
+        <div className="w-full max-w-md rounded-[2rem] border border-[#2a2a2d] bg-[#111214]/90 p-8 shadow-[0_30px_80px_rgba(0,0,0,0.5)] backdrop-blur-sm">
+          <p className="text-center text-[10px] font-semibold uppercase tracking-[0.38em] text-[#a1a1aa]">
             global saVINVING
           </p>
-          <h1 className="mt-4 text-center text-3xl font-semibold text-[#2b201c]">Daily Diary</h1>
-          <p className="mt-3 text-center text-sm text-[#6d554d]">Welcome, {USER_NAME}</p>
+          <h1 className="mt-4 text-center text-3xl font-semibold text-white">Daily Diary</h1>
+          <p className="mt-3 text-center text-sm text-[#d4d4d8]">Welcome, {USER_NAME}</p>
 
           <form onSubmit={handleUnlock} className="mt-7 space-y-5">
             <label className="block">
-              <span className="mb-2 block text-xs font-semibold uppercase tracking-[0.24em] text-[#8d6859]">
+              <span className="mb-2 block text-xs font-semibold uppercase tracking-[0.24em] text-[#a1a1aa]">
                 Enter PIN
               </span>
               <input
@@ -220,16 +220,16 @@ export function DiaryPage() {
                 maxLength={5}
                 value={pinInput}
                 onChange={(event) => setPinInput(event.target.value.replace(/\D/g, ""))}
-                className="w-full rounded-2xl border border-[#e7d1bf] bg-[#f9f1ea] px-4 py-3 text-center text-2xl tracking-[0.6em] text-[#2e241f] outline-none ring-0 placeholder:text-[#b29586] focus:border-[#c98d6d]"
+                className="w-full rounded-2xl border border-[#303036] bg-[#17181b] px-4 py-3 text-center text-2xl tracking-[0.6em] text-white outline-none ring-0 placeholder:text-[#6b7280] focus:border-[#8b5cf6]"
                 placeholder="•••••"
               />
             </label>
 
-            {pinError ? <p className="text-sm text-red-600">{pinError}</p> : null}
+            {pinError ? <p className="text-sm text-red-400">{pinError}</p> : null}
 
             <button
               type="submit"
-              className="w-full rounded-full bg-[#2a211d] px-4 py-3 text-sm font-semibold text-[#fffaf6] transition hover:bg-[#47362d]"
+              className="w-full rounded-full bg-[#f5f5f5] px-4 py-3 text-sm font-semibold text-[#111214] transition hover:bg-white"
             >
               Unlock diary
             </button>
@@ -240,22 +240,22 @@ export function DiaryPage() {
   }
 
   return (
-    <div className="min-h-screen bg-[radial-gradient(circle_at_top,#f9f3ed,#f0e3d5_46%,#e9d7c4)] text-[#2d231f]">
+    <div className="min-h-screen bg-[radial-gradient(circle_at_top,#121316,#09090b_46%,#040404)] text-white">
       <div className="mx-auto max-w-7xl px-4 py-6 sm:px-6 lg:px-8">
-        <header className="mb-6 flex flex-col gap-4 rounded-[2rem] border border-[#e7d4c3] bg-white/70 p-4 shadow-[0_20px_60px_rgba(89,62,46,0.08)] backdrop-blur-md sm:flex-row sm:items-center sm:justify-between">
+        <header className="mb-6 flex flex-col gap-4 rounded-[2rem] border border-[#2a2a2d] bg-[#111214]/80 p-4 shadow-[0_20px_60px_rgba(0,0,0,0.45)] backdrop-blur-md sm:flex-row sm:items-center sm:justify-between">
           <div>
-            <p className="text-[10px] font-semibold uppercase tracking-[0.32em] text-[#9a715f]">global saVINVING</p>
-            <h1 className="mt-2 text-2xl font-semibold text-[#2b211d]">{USER_NAME}</h1>
+            <p className="text-[10px] font-semibold uppercase tracking-[0.32em] text-[#a1a1aa]">global saVINVING</p>
+            <h1 className="mt-2 text-2xl font-semibold text-white">{USER_NAME}</h1>
           </div>
 
           <div className="flex items-center gap-3">
-            <span className="rounded-full border border-[#ecd6c4] bg-[#f9f1ea] px-3 py-1 text-[10px] font-semibold uppercase tracking-[0.28em] text-[#7a6256]">
+            <span className="rounded-full border border-[#303036] bg-[#17181b] px-3 py-1 text-[10px] font-semibold uppercase tracking-[0.28em] text-[#d4d4d8]">
               {monthName(calendarMonth)}
             </span>
             <button
               type="button"
               onClick={() => setIsUnlocked(false)}
-              className="rounded-full border border-[#e7d6c7] bg-[#f8efe8] px-3 py-2 text-sm text-[#473a34]"
+              className="rounded-full border border-[#303036] bg-[#17181b] px-3 py-2 text-sm text-[#e5e7eb]"
             >
               Lock diary
             </button>
@@ -264,28 +264,28 @@ export function DiaryPage() {
 
         <main className="grid gap-6 xl:grid-cols-[1.2fr_1.8fr]">
           <section className="space-y-6">
-            <div className="rounded-[2rem] border border-[#ead6c5] bg-[#fffaf7] p-4 shadow-[0_18px_45px_rgba(112,77,58,0.08)] sm:p-5">
+            <div className="rounded-[2rem] border border-[#2a2a2d] bg-[#111214] p-4 shadow-[0_18px_45px_rgba(0,0,0,0.45)] sm:p-5">
               <div className="mb-4 flex items-center justify-between">
-                <h2 className="text-xl font-semibold text-[#2d231f]">Calendar</h2>
+                <h2 className="text-xl font-semibold text-white">Calendar</h2>
                 <div className="flex gap-2">
                   <button
                     type="button"
                     onClick={() => setCalendarMonth(new Date(calendarMonth.getFullYear(), calendarMonth.getMonth() - 1, 1))}
-                    className="h-9 w-9 rounded-full border border-[#ecdccf] bg-[#f8efe8] text-lg text-[#4d3b35]"
+                    className="h-9 w-9 rounded-full border border-[#303036] bg-[#17181b] text-lg text-[#f3f4f6]"
                   >
                     ‹
                   </button>
                   <button
                     type="button"
                     onClick={() => setCalendarMonth(new Date(calendarMonth.getFullYear(), calendarMonth.getMonth() + 1, 1))}
-                    className="h-9 w-9 rounded-full border border-[#ecdccf] bg-[#f8efe8] text-lg text-[#4d3b35]"
+                    className="h-9 w-9 rounded-full border border-[#303036] bg-[#17181b] text-lg text-[#f3f4f6]"
                   >
                     ›
                   </button>
                 </div>
               </div>
 
-              <div className="mb-3 grid grid-cols-7 gap-2 text-center text-[10px] font-semibold uppercase tracking-[0.25em] text-[#8d6859]">
+              <div className="mb-3 grid grid-cols-7 gap-2 text-center text-[10px] font-semibold uppercase tracking-[0.25em] text-[#a1a1aa]">
                 {['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat'].map((d) => (
                   <div key={d}>{d}</div>
                 ))}
@@ -305,13 +305,13 @@ export function DiaryPage() {
                       onClick={() => setSelectedDate(key)}
                       className={[
                         "relative flex h-12 items-center justify-center rounded-xl border text-sm transition",
-                        isSelected ? "border-[#c98d6d] bg-[#f0dfcd] text-[#2b201d]" : "border-[#f0e2d8] bg-[#faf3ee] text-[#4f3f38]",
+                        isSelected ? "border-[#8b5cf6] bg-[#1f1b2d] text-white" : "border-[#2a2a2d] bg-[#17181b] text-[#e5e7eb]",
                         !isCurrentMonth ? "opacity-45" : "",
                       ].join(" ")}
                     >
                       {day.getDate()}
                       {hasEntry ? (
-                        <span className="absolute bottom-1.5 h-1.5 w-1.5 rounded-full bg-[#b45f4d]" />
+                        <span className="absolute bottom-1.5 h-1.5 w-1.5 rounded-full bg-[#f59e0b]" />
                       ) : null}
                     </button>
                   );
@@ -319,54 +319,54 @@ export function DiaryPage() {
               </div>
             </div>
 
-            <div className="rounded-[2rem] border border-[#ead6c5] bg-[#f6eae1] p-5 shadow-[0_18px_45px_rgba(112,77,58,0.08)]">
-              <h2 className="text-lg font-semibold text-[#2c201b]">Your diary pulse</h2>
+            <div className="rounded-[2rem] border border-[#2a2a2d] bg-[#111214] p-5 shadow-[0_18px_45px_rgba(0,0,0,0.45)]">
+              <h2 className="text-lg font-semibold text-white">Your diary pulse</h2>
               <div className="mt-4 grid grid-cols-3 gap-3">
-                <div className="rounded-2xl border border-[#ecd9c7] bg-white/60 p-3">
-                  <p className="text-[10px] uppercase tracking-[0.24em] text-[#8a6658]">Entries</p>
-                  <p className="mt-2 text-2xl font-semibold text-[#2b211d]">{stats.total}</p>
+                <div className="rounded-2xl border border-[#303036] bg-[#17181b] p-3">
+                  <p className="text-[10px] uppercase tracking-[0.24em] text-[#a1a1aa]">Entries</p>
+                  <p className="mt-2 text-2xl font-semibold text-white">{stats.total}</p>
                 </div>
-                <div className="rounded-2xl border border-[#ecd9c7] bg-white/60 p-3">
-                  <p className="text-[10px] uppercase tracking-[0.24em] text-[#8a6658]">This month</p>
-                  <p className="mt-2 text-2xl font-semibold text-[#2b211d]">{stats.thisMonth}</p>
+                <div className="rounded-2xl border border-[#303036] bg-[#17181b] p-3">
+                  <p className="text-[10px] uppercase tracking-[0.24em] text-[#a1a1aa]">This month</p>
+                  <p className="mt-2 text-2xl font-semibold text-white">{stats.thisMonth}</p>
                 </div>
-                <div className="rounded-2xl border border-[#ecd9c7] bg-white/60 p-3">
-                  <p className="text-[10px] uppercase tracking-[0.24em] text-[#8a6658]">Mood</p>
-                  <p className="mt-2 text-sm font-semibold text-[#2b211d]">{stats.dominantMood}</p>
+                <div className="rounded-2xl border border-[#303036] bg-[#17181b] p-3">
+                  <p className="text-[10px] uppercase tracking-[0.24em] text-[#a1a1aa]">Mood</p>
+                  <p className="mt-2 text-sm font-semibold text-white">{stats.dominantMood}</p>
                 </div>
               </div>
             </div>
           </section>
 
           <section className="space-y-6">
-            <form onSubmit={handleSubmit} className="rounded-[2rem] border border-[#ead6c5] bg-[#fffaf7] p-5 shadow-[0_18px_45px_rgba(112,77,58,0.08)] sm:p-6">
+            <form onSubmit={handleSubmit} className="rounded-[2rem] border border-[#2a2a2d] bg-[#111214] p-5 shadow-[0_18px_45px_rgba(0,0,0,0.45)] sm:p-6">
               <div className="mb-5 flex items-center justify-between gap-3">
                 <div>
-                  <p className="text-[10px] font-semibold uppercase tracking-[0.28em] text-[#9a715f]">New entry</p>
-                  <h2 className="mt-2 text-2xl font-semibold text-[#2d231f]">Write today</h2>
+                  <p className="text-[10px] font-semibold uppercase tracking-[0.28em] text-[#a1a1aa]">New entry</p>
+                  <h2 className="mt-2 text-2xl font-semibold text-white">Write today</h2>
                 </div>
-                <span className="rounded-full border border-[#ecd8c8] bg-[#f6eee7] px-3 py-1 text-xs text-[#5b433c]">
+                <span className="rounded-full border border-[#303036] bg-[#17181b] px-3 py-1 text-xs text-[#e5e7eb]">
                   {formatDisplayDate(selectedDate)}
                 </span>
               </div>
 
               <div className="grid gap-4 sm:grid-cols-2">
                 <label className="block">
-                  <span className="mb-2 block text-xs font-semibold uppercase tracking-[0.24em] text-[#8d6859]">Date</span>
+                  <span className="mb-2 block text-xs font-semibold uppercase tracking-[0.24em] text-[#a1a1aa]">Date</span>
                   <input
                     type="date"
                     value={form.date}
                     onChange={(event) => setForm((current) => ({ ...current, date: event.target.value }))}
-                    className="w-full rounded-2xl border border-[#ecdccf] bg-[#f9f3ee] px-3 py-3 text-[#2d241f] outline-none focus:border-[#c98d6d]"
+                    className="w-full rounded-2xl border border-[#303036] bg-[#17181b] px-3 py-3 text-white outline-none focus:border-[#8b5cf6]"
                   />
                 </label>
 
                 <label className="block">
-                  <span className="mb-2 block text-xs font-semibold uppercase tracking-[0.24em] text-[#8d6859]">Mood</span>
+                  <span className="mb-2 block text-xs font-semibold uppercase tracking-[0.24em] text-[#a1a1aa]">Mood</span>
                   <select
                     value={form.mood}
                     onChange={(event) => setForm((current) => ({ ...current, mood: event.target.value as Mood }))}
-                    className="w-full rounded-2xl border border-[#ecdccf] bg-[#f9f3ee] px-3 py-3 text-[#2d241f] outline-none focus:border-[#c98d6d]"
+                    className="w-full rounded-2xl border border-[#303036] bg-[#17181b] px-3 py-3 text-white outline-none focus:border-[#8b5cf6]"
                   >
                     {moodOptions.map((mood) => (
                       <option key={mood} value={mood}>{mood}</option>
@@ -376,72 +376,72 @@ export function DiaryPage() {
               </div>
 
               <label className="mt-4 block">
-                <span className="mb-2 block text-xs font-semibold uppercase tracking-[0.24em] text-[#8d6859]">Title</span>
+                <span className="mb-2 block text-xs font-semibold uppercase tracking-[0.24em] text-[#a1a1aa]">Title</span>
                 <input
                   type="text"
                   value={form.title}
                   onChange={(event) => setForm((current) => ({ ...current, title: event.target.value }))}
                   placeholder="What happened today?"
-                  className="w-full rounded-2xl border border-[#ecdccf] bg-[#f9f3ee] px-3 py-3 text-[#2d241f] outline-none placeholder:text-[#a2877d] focus:border-[#c98d6d]"
+                  className="w-full rounded-2xl border border-[#303036] bg-[#17181b] px-3 py-3 text-white outline-none placeholder:text-[#6b7280] focus:border-[#8b5cf6]"
                 />
               </label>
 
               <label className="mt-4 block">
-                <span className="mb-2 block text-xs font-semibold uppercase tracking-[0.24em] text-[#8d6859]">Entry</span>
+                <span className="mb-2 block text-xs font-semibold uppercase tracking-[0.24em] text-[#a1a1aa]">Entry</span>
                 <textarea
                   value={form.text}
                   onChange={(event) => setForm((current) => ({ ...current, text: event.target.value }))}
                   rows={6}
                   placeholder="Write your thoughts, memories, and lesson for today..."
-                  className="w-full rounded-2xl border border-[#ecdccf] bg-[#f9f3ee] px-3 py-3 text-[#2d241f] outline-none placeholder:text-[#a2877d] focus:border-[#c98d6d]"
+                  className="w-full rounded-2xl border border-[#303036] bg-[#17181b] px-3 py-3 text-white outline-none placeholder:text-[#6b7280] focus:border-[#8b5cf6]"
                 />
               </label>
 
               <div className="mt-4 flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
-                <label className="flex cursor-pointer items-center gap-3 rounded-full border border-[#e5d2c1] bg-[#f7efe9] px-3 py-2 text-sm text-[#4a3833]">
+                <label className="flex cursor-pointer items-center gap-3 rounded-full border border-[#303036] bg-[#17181b] px-3 py-2 text-sm text-[#e5e7eb]">
                   <span>📷 Upload image</span>
                   <input type="file" accept="image/*" onChange={handleImageUpload} className="hidden" />
                 </label>
 
-                <button type="submit" className="rounded-full bg-[#2a211d] px-5 py-3 text-sm font-semibold text-[#fffaf6] transition hover:bg-[#47362d]">
+                <button type="submit" className="rounded-full bg-[#f5f5f5] px-5 py-3 text-sm font-semibold text-[#111214] transition hover:bg-white">
                   Save entry
                 </button>
               </div>
 
               {form.image ? (
-                <div className="mt-4 overflow-hidden rounded-[1.5rem] border border-[#ead6c5] bg-[#f8f1ea]">
+                <div className="mt-4 overflow-hidden rounded-[1.5rem] border border-[#2a2a2d] bg-[#17181b]">
                   <img src={form.image} alt="Uploaded diary moment" className="h-48 w-full object-cover" />
                 </div>
               ) : null}
             </form>
 
-            <div className="rounded-[2rem] border border-[#ead6c5] bg-[#fffaf7] p-5 shadow-[0_18px_45px_rgba(112,77,58,0.08)]">
+            <div className="rounded-[2rem] border border-[#2a2a2d] bg-[#111214] p-5 shadow-[0_18px_45px_rgba(0,0,0,0.45)]">
               <div className="mb-4 flex items-center justify-between">
-                <h2 className="text-xl font-semibold text-[#2d231f]">{formatDisplayDate(selectedDate)}</h2>
-                <span className="rounded-full border border-[#e8d6c9] bg-[#f7f0ea] px-2.5 py-1 text-[10px] font-semibold uppercase tracking-[0.24em] text-[#7a6357]">
+                <h2 className="text-xl font-semibold text-white">{formatDisplayDate(selectedDate)}</h2>
+                <span className="rounded-full border border-[#303036] bg-[#17181b] px-2.5 py-1 text-[10px] font-semibold uppercase tracking-[0.24em] text-[#d4d4d8]">
                   {selectedEntries.length} entries
                 </span>
               </div>
 
               <div className="space-y-4">
                 {selectedEntries.length === 0 ? (
-                  <div className="rounded-[1.5rem] border border-dashed border-[#e7d6c8] bg-[#faf3ee] p-5 text-sm text-[#6a514a]">
+                  <div className="rounded-[1.5rem] border border-dashed border-[#303036] bg-[#17181b] p-5 text-sm text-[#d4d4d8]">
                     No entries yet for this day.
                   </div>
                 ) : (
                   selectedEntries.map((entry) => (
-                    <article key={entry.id} className="rounded-[1.5rem] border border-[#ebd9ca] bg-[#f9f1ea] p-4">
+                    <article key={entry.id} className="rounded-[1.5rem] border border-[#303036] bg-[#17181b] p-4">
                       <div className="mb-3 flex items-center justify-between gap-2">
                         <span className={`rounded-full border px-2.5 py-1 text-[10px] font-semibold uppercase tracking-[0.2em] ${moodPalette[entry.mood]}`}>
                           {entry.mood}
                         </span>
-                        <span className="text-[10px] uppercase tracking-[0.2em] text-[#8b6c5e]">
+                        <span className="text-[10px] uppercase tracking-[0.2em] text-[#a1a1aa]">
                           {new Date(entry.createdAt).toLocaleTimeString([], { hour: "2-digit", minute: "2-digit" })}
                         </span>
                       </div>
 
-                      <h3 className="text-xl font-semibold text-[#2d231f]">{entry.title}</h3>
-                      <p className="mt-2 text-sm leading-7 text-[#51443b]">{entry.text}</p>
+                      <h3 className="text-xl font-semibold text-white">{entry.title}</h3>
+                      <p className="mt-2 text-sm leading-7 text-[#d4d4d8]">{entry.text}</p>
 
                       {entry.image ? (
                         <img src={entry.image} alt={entry.title} className="mt-4 h-52 w-full rounded-[1.2rem] object-cover" />

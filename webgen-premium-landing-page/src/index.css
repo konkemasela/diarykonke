@@ -13,9 +13,9 @@ body {
   margin: 0;
   min-width: 320px;
   background:
-    radial-gradient(circle at top, rgba(214, 170, 132, 0.35), transparent 30%),
-    linear-gradient(135deg, #f9f3eb 0%, #f1e3d4 52%, #f7efe8 100%);
-  color: #2f241f;
+    radial-gradient(circle at top, rgba(63, 63, 70, 0.8), transparent 28%),
+    linear-gradient(135deg, #020202 0%, #0b0b0d 48%, #111214 100%);
+  color: #f5f5f5;
   font-family: var(--font-sans);
   -webkit-font-smoothing: antialiased;
   text-rendering: optimizeLegibility;
@@ -26,8 +26,8 @@ body {
 }
 
 ::selection {
-  background: rgba(140, 97, 73, 0.22);
-  color: #2d201d;
+  background: rgba(255, 255, 255, 0.2);
+  color: #ffffff;
 }
 
 .font-display {
