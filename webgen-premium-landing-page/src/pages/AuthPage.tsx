@@ -61,7 +61,7 @@ export function AuthPage({
               value={passwordInput}
               onChange={(event) => setPasswordInput(event.target.value)}
               className="w-full rounded-2xl border border-[#303036] bg-[#17181b] px-4 py-3 text-center text-lg text-white outline-none ring-0 placeholder:text-[#6b7280] focus:border-[#8b5cf6]"
-              placeholder="Wenzokuhle Kunene"
+              placeholder="well well well W&K"
             />
           </label>
 
