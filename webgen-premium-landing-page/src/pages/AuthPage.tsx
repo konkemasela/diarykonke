@@ -14,7 +14,7 @@ export function AuthPage() {
 
     if (pinInput === PIN) {
       setPinError("");
-      navigate("/home");
+      navigate("/diary/home");
       return;
     }
 

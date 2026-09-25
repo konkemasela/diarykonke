@@ -3,6 +3,7 @@ import { BrowserRouter, Navigate, Route, Routes } from "react-router-dom";
 import { AuthPage } from "./pages/AuthPage";
 import { DiaryHomePage } from "./pages/DiaryHomePage";
 import { NewEntryPage } from "./pages/NewEntryPage";
+import { NotFoundPage } from "./pages/NotFoundPage";
 import { createSampleEntries, dateKey, type DiaryEntry } from "./diary";
 
 const STORAGE_KEY = "global_saving_diary_entries";
@@ -41,10 +42,10 @@ export default function App() {
   return (
     <BrowserRouter>
       <Routes>
-        <Route path="/" element={<Navigate to="/auth" replace />} />
+        <Route path="/" element={<Navigate to="/diary/home" replace />} />
         <Route path="/auth" element={<AuthPage />} />
         <Route
-          path="/home"
+          path="/diary/home"
           element={
             <DiaryHomePage
               entries={entries}
@@ -56,7 +57,7 @@ export default function App() {
           }
         />
         <Route
-          path="/new-entry"
+          path="/diary/new-entry"
           element={
             <NewEntryPage
               initialDate={selectedDate}
@@ -64,6 +65,7 @@ export default function App() {
             />
           }
         />
+        <Route path="*" element={<NotFoundPage />} />
       </Routes>
     </BrowserRouter>
   );

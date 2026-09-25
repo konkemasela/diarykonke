@@ -37,7 +37,7 @@ export function NewEntryPage({
       createdAt: new Date().toISOString(),
     });
 
-    navigate("/home");
+    navigate("/diary/home");
   };
 
   const handleImageUpload = (event: React.ChangeEvent<HTMLInputElement>) => {
@@ -62,7 +62,7 @@ export function NewEntryPage({
 
           <button
             type="button"
-            onClick={() => navigate("/home")}
+            onClick={() => navigate("/diary/home")}
             className="rounded-full border border-[#303036] bg-[#17181b] px-4 py-2 text-sm text-[#e5e7eb]"
           >
             Back to diary

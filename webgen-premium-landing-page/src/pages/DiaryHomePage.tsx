@@ -153,7 +153,7 @@ export function DiaryHomePage({
 
                 <button
                   type="button"
-                  onClick={() => navigate("/new-entry")}
+                  onClick={() => navigate("/diary/new-entry")}
                   className="rounded-full bg-[#f5f5f5] px-5 py-3 text-sm font-semibold text-[#111214] transition hover:bg-white"
                 >
                   New entry
