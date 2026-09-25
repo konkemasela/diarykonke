@@ -9,6 +9,8 @@ export type DiaryEntry = {
   image?: string;
   favorite?: boolean;
   bookmarked?: boolean;
+  reminderLabel?: string;
+  reminderPriority?: "Low" | "Medium" | "High";
   createdAt: string;
 };
 
@@ -65,6 +67,9 @@ export const createSampleEntries = (): DiaryEntry[] => [
     title: "Quiet start",
     text: "I woke up calm and made my coffee without rushing. I am learning to let the morning breathe before the day begins.",
     mood: "Calm",
+    bookmarked: true,
+    reminderLabel: "Family dinner",
+    reminderPriority: "Medium",
     createdAt: new Date().toISOString(),
   },
   {
@@ -73,6 +78,7 @@ export const createSampleEntries = (): DiaryEntry[] => [
     title: "Small win",
     text: "I finished one important task early and did not let self-doubt slow me down. That felt good.",
     mood: "Happy",
+    favorite: true,
     createdAt: new Date(Date.now() - 86400000).toISOString(),
   },
 ];

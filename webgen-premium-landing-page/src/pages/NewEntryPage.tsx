@@ -1,5 +1,8 @@
+import { BellRing, Flag, Sparkles } from "lucide-react";
 import { useEffect, useState } from "react";
 import { moodOptions, type DiaryEntry, type Mood } from "../diary";
+
+const emojiBar = ["✨", "💫", "🌙", "🔥", "💪", "🌿", "💖", "😌", "🎉", "🧠", "📌", "🚀", "☀️", "📝", "🧩", "🎯"];
 
 export function NewEntryPage({
   initialDate,
@@ -18,6 +21,8 @@ export function NewEntryPage({
     text: existingEntry?.text ?? "",
     mood: (existingEntry?.mood ?? "Happy") as Mood,
     image: existingEntry?.image ?? "",
+    reminderLabel: existingEntry?.reminderLabel ?? "",
+    reminderPriority: existingEntry?.reminderPriority ?? "Medium" as "Low" | "Medium" | "High",
   });
 
   useEffect(() => {
@@ -28,6 +33,8 @@ export function NewEntryPage({
         text: existingEntry.text,
         mood: existingEntry.mood,
         image: existingEntry.image ?? "",
+        reminderLabel: existingEntry.reminderLabel ?? "",
+        reminderPriority: existingEntry.reminderPriority ?? "Medium",
       });
       return;
     }
@@ -38,6 +45,8 @@ export function NewEntryPage({
       text: "",
       mood: "Happy",
       image: "",
+      reminderLabel: "",
+      reminderPriority: "Medium",
     });
   }, [existingEntry, initialDate]);
 
@@ -57,6 +66,9 @@ export function NewEntryPage({
       text: trimmedText,
       mood: form.mood,
       image: form.image || undefined,
+      bookmarked: Boolean(form.reminderLabel?.trim()),
+      reminderLabel: form.reminderLabel?.trim() || undefined,
+      reminderPriority: form.reminderLabel?.trim() ? form.reminderPriority : undefined,
       createdAt: existingEntry?.createdAt ?? new Date().toISOString(),
     });
 
@@ -139,6 +151,57 @@ export function NewEntryPage({
               className="w-full rounded-2xl border border-[#303036] bg-[#17181b] px-3 py-3 text-white outline-none placeholder:text-[#6b7280] focus:border-[#8b5cf6]"
             />
           </label>
+
+          <div className="rounded-[1.5rem] border border-[#303036] bg-[#17181b] p-3">
+            <div className="mb-3 flex items-center gap-2 text-[10px] font-semibold uppercase tracking-[0.24em] text-[#a1a1aa]">
+              <Sparkles className="h-3.5 w-3.5" />
+              Quick emoji vibes
+            </div>
+            <div className="flex flex-wrap gap-2">
+              {emojiBar.map((emoji) => (
+                <button
+                  key={emoji}
+                  type="button"
+                  onClick={() => setForm((current) => ({ ...current, text: `${current.text}${emoji} ` }))}
+                  className="rounded-full border border-[#303036] bg-[#111214] px-2.5 py-1.5 text-lg transition hover:border-[#8b5cf6]"
+                >
+                  {emoji}
+                </button>
+              ))}
+            </div>
+          </div>
+
+          <div className="grid gap-4 sm:grid-cols-2">
+            <label className="block">
+              <span className="mb-2 flex items-center gap-2 text-xs font-semibold uppercase tracking-[0.24em] text-[#a1a1aa]">
+                <BellRing className="h-3.5 w-3.5" />
+                Reminder name
+              </span>
+              <input
+                type="text"
+                value={form.reminderLabel}
+                onChange={(event) => setForm((current) => ({ ...current, reminderLabel: event.target.value }))}
+                placeholder="Family dinner, job call..."
+                className="w-full rounded-2xl border border-[#303036] bg-[#17181b] px-3 py-3 text-white outline-none placeholder:text-[#6b7280] focus:border-[#8b5cf6]"
+              />
+            </label>
+
+            <label className="block">
+              <span className="mb-2 flex items-center gap-2 text-xs font-semibold uppercase tracking-[0.24em] text-[#a1a1aa]">
+                <Flag className="h-3.5 w-3.5" />
+                Priority
+              </span>
+              <select
+                value={form.reminderPriority}
+                onChange={(event) => setForm((current) => ({ ...current, reminderPriority: event.target.value as "Low" | "Medium" | "High" }))}
+                className="w-full rounded-2xl border border-[#303036] bg-[#17181b] px-3 py-3 text-white outline-none focus:border-[#8b5cf6]"
+              >
+                <option value="Low">Low</option>
+                <option value="Medium">Medium</option>
+                <option value="High">High</option>
+              </select>
+            </label>
+          </div>
 
           <div className="flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
             <label className="flex cursor-pointer items-center gap-3 rounded-full border border-[#303036] bg-[#17181b] px-3 py-2 text-sm text-[#e5e7eb]">

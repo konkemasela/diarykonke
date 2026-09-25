@@ -1,4 +1,5 @@
 import {
+  BellRing,
   Bookmark,
   CalendarDays,
   Download,
@@ -6,6 +7,7 @@ import {
   Lock,
   PenLine,
   Search,
+  Shield,
   Sparkles,
   Star,
   Trash2,
@@ -35,6 +37,7 @@ export function DiaryHomePage({
   onToggleBookmark,
   onEditEntry,
   onExport,
+  onOpenSecrets,
 }: {
   entries: DiaryEntry[];
   selectedDate: string;
@@ -47,6 +50,7 @@ export function DiaryHomePage({
   onToggleBookmark: (entryId: string) => void;
   onEditEntry: (entry: DiaryEntry) => void;
   onExport: () => void;
+  onOpenSecrets: () => void;
 }) {
   const [searchQuery, setSearchQuery] = useState("");
   const [expandedEntryId, setExpandedEntryId] = useState<string | null>(null);
@@ -107,6 +111,13 @@ export function DiaryHomePage({
             <span className="rounded-full border border-[#303036] bg-[#17181b] px-3 py-1 text-[10px] font-semibold uppercase tracking-[0.28em] text-[#d4d4d8]">
               {monthName(calendarMonth)}
             </span>
+            <button
+              type="button"
+              onClick={onOpenSecrets}
+              className="btn-shine rounded-full border border-[#303036] bg-[#17181b] px-3 py-2 text-sm text-[#e5e7eb] transition hover:border-[var(--brand-gold)] hover:text-white"
+            >
+              <span className="inline-flex items-center gap-2"><Shield className="h-3.5 w-3.5" />Vault</span>
+            </button>
             <button
               type="button"
               onClick={() => goTo("/auth")}
@@ -296,6 +307,13 @@ export function DiaryHomePage({
 
                         {isExpanded ? (
                           <div className="mt-4 space-y-4">
+                            {entry.bookmarked && entry.reminderLabel ? (
+                              <div className="flex items-center justify-between gap-3 rounded-2xl border border-amber-400/30 bg-amber-500/10 px-3 py-2 text-[10px] font-semibold uppercase tracking-[0.22em] text-amber-100">
+                                <span className="inline-flex items-center gap-2"><BellRing className="h-3.5 w-3.5" />{entry.reminderLabel}</span>
+                                <span>{entry.reminderPriority ?? "Medium"}</span>
+                              </div>
+                            ) : null}
+
                             <p className="text-sm leading-7 text-[#d4d4d8]">{entry.text}</p>
 
                             {entry.image ? (
@@ -314,8 +332,8 @@ export function DiaryHomePage({
                                 : "border-[#303036] bg-[#17181b] text-[#e5e7eb]"
                             }`}
                           >
-                            <Bookmark className="h-3.5 w-3.5" fill={entry.bookmarked ? "currentColor" : "none"} />
-                            {entry.bookmarked ? "Bookmarked" : "Bookmark"}
+                            <BellRing className="h-3.5 w-3.5" />
+                            {entry.bookmarked ? `Reminder: ${entry.reminderLabel ?? "Important date"}` : "Bookmark"}
                           </button>
                           <button
                             type="button"

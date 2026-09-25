@@ -3,6 +3,7 @@ import { AuthPage } from "./pages/AuthPage";
 import { DiaryHomePage } from "./pages/DiaryHomePage";
 import { NewEntryPage } from "./pages/NewEntryPage";
 import { NotFoundPage } from "./pages/NotFoundPage";
+import { SecretsPage, type SecretItem } from "./pages/SecretsPage";
 import { createSampleEntries, dateKey, type DiaryEntry } from "./diary";
 
 const STORAGE_KEY = "global_saving_diary_entries";
@@ -44,6 +45,7 @@ const exportEntries = (entries: DiaryEntry[]) => {
 
 export default function App() {
   const [entries, setEntries] = useState<DiaryEntry[]>([]);
+  const [secrets, setSecrets] = useState<SecretItem[]>([]);
   const [selectedDate, setSelectedDate] = useState(dateKey(new Date()));
   const [calendarMonth, setCalendarMonth] = useState(new Date());
 
@@ -67,6 +69,24 @@ export default function App() {
   useEffect(() => {
     localStorage.setItem(STORAGE_KEY, JSON.stringify(entries));
   }, [entries]);
+
+  useEffect(() => {
+    const savedSecrets = localStorage.getItem("konke_diary_secrets");
+    if (savedSecrets) {
+      try {
+        const parsed = JSON.parse(savedSecrets) as SecretItem[];
+        if (Array.isArray(parsed)) {
+          setSecrets(parsed);
+        }
+      } catch {
+        // ignore broken saved secrets
+      }
+    }
+  }, []);
+
+  useEffect(() => {
+    localStorage.setItem("konke_diary_secrets", JSON.stringify(secrets));
+  }, [secrets]);
 
   const handleSaveEntry = (entry: DiaryEntry) => {
     setEntries((current) => {
@@ -94,10 +114,33 @@ export default function App() {
 
   const handleToggleBookmark = (entryId: string) => {
     setEntries((current) =>
-      current.map((entry) =>
-        entry.id === entryId ? { ...entry, bookmarked: !entry.bookmarked } : entry,
-      ),
+      current.map((entry) => {
+        if (entry.id !== entryId) return entry;
+        const nextBooked = !entry.bookmarked;
+        return {
+          ...entry,
+          bookmarked: nextBooked,
+          reminderLabel: nextBooked ? entry.reminderLabel ?? "Important date" : entry.reminderLabel,
+          reminderPriority: nextBooked ? entry.reminderPriority ?? "Medium" : entry.reminderPriority,
+        };
+      }),
     );
+  };
+
+  const handleAddSecret = (title: string, content: string) => {
+    setSecrets((current) => [
+      {
+        id: crypto.randomUUID(),
+        title,
+        content,
+        createdAt: new Date().toISOString(),
+      },
+      ...current,
+    ]);
+  };
+
+  const handleDeleteSecret = (id: string) => {
+    setSecrets((current) => current.filter((secret) => secret.id !== id));
   };
 
   const pathname = window.location.pathname;
@@ -133,8 +176,13 @@ export default function App() {
         onToggleBookmark={handleToggleBookmark}
         onEditEntry={(entry) => goTo(`/diary/new-entry?edit=${entry.id}`)}
         onExport={() => exportEntries(entries)}
+        onOpenSecrets={() => goTo("/secrets")}
       />
     );
+  }
+
+  if (pathname === "/secrets") {
+    return <SecretsPage secrets={secrets} onAddSecret={handleAddSecret} onDeleteSecret={handleDeleteSecret} />;
   }
 
   if (pathname === "/") {
