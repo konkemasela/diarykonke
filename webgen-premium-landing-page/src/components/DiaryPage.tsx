@@ -155,7 +155,7 @@ export function DiaryPage() {
       setPinError("");
       return;
     }
-    setPinError("Incorrect PIN. Please try again.");
+    setPinError("loool bro you got it wrong :P, better luck next time");
   };
 
   const handleSubmit = (event: React.FormEvent) => {
@@ -221,7 +221,7 @@ export function DiaryPage() {
                 value={pinInput}
                 onChange={(event) => setPinInput(event.target.value.replace(/\D/g, ""))}
                 className="w-full rounded-2xl border border-[#303036] bg-[#17181b] px-4 py-3 text-center text-2xl tracking-[0.6em] text-white outline-none ring-0 placeholder:text-[#6b7280] focus:border-[#8b5cf6]"
-                placeholder="•••••"
+                placeholder="the code is my dad's number, but you won't guess it 😎"
               />
             </label>
 
@@ -244,7 +244,7 @@ export function DiaryPage() {
       <div className="mx-auto max-w-7xl px-4 py-6 sm:px-6 lg:px-8">
         <header className="mb-6 flex flex-col gap-4 rounded-[2rem] border border-[#2a2a2d] bg-[#111214]/80 p-4 shadow-[0_20px_60px_rgba(0,0,0,0.45)] backdrop-blur-md sm:flex-row sm:items-center sm:justify-between">
           <div>
-            <p className="text-[10px] font-semibold uppercase tracking-[0.32em] text-[#a1a1aa]">global saVINVING</p>
+            <p className="text-[10px] font-semibold uppercase tracking-[0.32em] text-[#a1a1aa]">KONKE</p>
             <h1 className="mt-2 text-2xl font-semibold text-white">{USER_NAME}</h1>
           </div>
 
