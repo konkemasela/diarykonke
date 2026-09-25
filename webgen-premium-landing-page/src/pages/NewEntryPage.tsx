@@ -1,22 +1,45 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { moodOptions, type DiaryEntry, type Mood } from "../diary";
 
 export function NewEntryPage({
   initialDate,
+  existingEntry,
   onSave,
   goTo,
 }: {
   initialDate: string;
+  existingEntry?: DiaryEntry;
   onSave: (entry: DiaryEntry) => void;
   goTo: (path: string) => void;
 }) {
   const [form, setForm] = useState({
-    date: initialDate,
-    title: "",
-    text: "",
-    mood: "Happy" as Mood,
-    image: "",
+    date: existingEntry?.date ?? initialDate,
+    title: existingEntry?.title ?? "",
+    text: existingEntry?.text ?? "",
+    mood: (existingEntry?.mood ?? "Happy") as Mood,
+    image: existingEntry?.image ?? "",
   });
+
+  useEffect(() => {
+    if (existingEntry) {
+      setForm({
+        date: existingEntry.date,
+        title: existingEntry.title,
+        text: existingEntry.text,
+        mood: existingEntry.mood,
+        image: existingEntry.image ?? "",
+      });
+      return;
+    }
+
+    setForm({
+      date: initialDate,
+      title: "",
+      text: "",
+      mood: "Happy",
+      image: "",
+    });
+  }, [existingEntry, initialDate]);
 
   const handleSubmit = (event: React.FormEvent) => {
     event.preventDefault();
@@ -28,13 +51,13 @@ export function NewEntryPage({
     }
 
     onSave({
-      id: crypto.randomUUID(),
+      id: existingEntry?.id ?? crypto.randomUUID(),
       date: form.date,
       title: trimmedTitle,
       text: trimmedText,
       mood: form.mood,
       image: form.image || undefined,
-      createdAt: new Date().toISOString(),
+      createdAt: existingEntry?.createdAt ?? new Date().toISOString(),
     });
 
     goTo("/diary/home");
@@ -56,8 +79,8 @@ export function NewEntryPage({
       <div className="mx-auto max-w-3xl rounded-[2rem] border border-[#2a2a2d] bg-[#111214] p-6 shadow-[0_18px_45px_rgba(0,0,0,0.45)] sm:p-8">
         <div className="mb-6 flex items-center justify-between">
           <div>
-            <p className="text-[10px] font-semibold uppercase tracking-[0.28em] text-[#a1a1aa]">New entry</p>
-            <h1 className="mt-2 text-3xl font-semibold text-white">Write today</h1>
+            <p className="text-[10px] font-semibold uppercase tracking-[0.28em] text-[#a1a1aa]">{existingEntry ? "Edit entry" : "New entry"}</p>
+            <h1 className="mt-2 text-3xl font-semibold text-white">{existingEntry ? "Fix this one" : "Write today"}</h1>
           </div>
 
           <button
@@ -124,7 +147,7 @@ export function NewEntryPage({
             </label>
 
             <button type="submit" className="rounded-full bg-[#f5f5f5] px-5 py-3 text-sm font-semibold text-[#111214] transition hover:bg-white">
-              Save entry
+              {existingEntry ? "Update entry" : "Save entry"}
             </button>
           </div>
 

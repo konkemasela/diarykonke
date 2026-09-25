@@ -1,3 +1,4 @@
+import { useMemo, useState } from "react";
 import { buildCalendarDays, dateKey, formatDisplayDate, moodPalette, monthName, moodOptions, type DiaryEntry } from "../diary";
 
 export function DiaryHomePage({
@@ -7,6 +8,9 @@ export function DiaryHomePage({
   calendarMonth,
   setCalendarMonth,
   goTo,
+  onDeleteEntry,
+  onEditEntry,
+  onExport,
 }: {
   entries: DiaryEntry[];
   selectedDate: string;
@@ -14,10 +18,27 @@ export function DiaryHomePage({
   calendarMonth: Date;
   setCalendarMonth: (date: Date) => void;
   goTo: (path: string) => void;
+  onDeleteEntry: (entryId: string) => void;
+  onEditEntry: (entry: DiaryEntry) => void;
+  onExport: () => void;
 }) {
-  const selectedEntries = [...entries]
-    .filter((entry) => entry.date === selectedDate)
-    .sort((a, b) => b.createdAt.localeCompare(a.createdAt));
+  const [searchQuery, setSearchQuery] = useState("");
+
+  const filteredEntries = useMemo(() => {
+    const base = [...entries]
+      .filter((entry) => entry.date === selectedDate)
+      .sort((a, b) => b.createdAt.localeCompare(a.createdAt));
+
+    if (!searchQuery.trim()) {
+      return base;
+    }
+
+    const query = searchQuery.trim().toLowerCase();
+    return base.filter((entry) => {
+      const text = `${entry.title} ${entry.text} ${entry.mood}`.toLowerCase();
+      return text.includes(query);
+    });
+  }, [entries, searchQuery, selectedDate]);
 
   const entryMap = new Map<string, DiaryEntry[]>();
   entries.forEach((entry) => {
@@ -140,6 +161,18 @@ export function DiaryHomePage({
                   <p className="mt-2 text-sm font-semibold text-white">{stats.dominantMood}</p>
                 </div>
               </div>
+
+              <div className="mt-5 space-y-2">
+                {moodOptions.map((mood) => {
+                  const count = entries.filter((entry) => entry.mood === mood).length;
+                  return (
+                    <div key={mood} className="flex items-center justify-between rounded-xl border border-[#303036] bg-[#17181b] px-3 py-2 text-sm text-[#d4d4d8]">
+                      <span>{mood}</span>
+                      <span className="font-semibold text-white">{count}</span>
+                    </div>
+                  );
+                })}
+              </div>
             </div>
           </section>
 
@@ -151,22 +184,42 @@ export function DiaryHomePage({
                   <h2 className="mt-2 text-2xl font-semibold text-white">{formatDisplayDate(selectedDate)}</h2>
                 </div>
 
-                <button
-                  type="button"
-                  onClick={() => goTo("/diary/new-entry")}
-                  className="rounded-full bg-[#f5f5f5] px-5 py-3 text-sm font-semibold text-[#111214] transition hover:bg-white"
-                >
-                  New entry
-                </button>
+                <div className="flex items-center gap-2">
+                  <button
+                    type="button"
+                    onClick={onExport}
+                    className="rounded-full border border-[#303036] bg-[#17181b] px-4 py-2 text-sm font-semibold text-[#e5e7eb]"
+                  >
+                    Export
+                  </button>
+                  <button
+                    type="button"
+                    onClick={() => goTo("/diary/new-entry")}
+                    className="rounded-full bg-[#f5f5f5] px-5 py-3 text-sm font-semibold text-[#111214] transition hover:bg-white"
+                  >
+                    New entry
+                  </button>
+                </div>
               </div>
 
+              <label className="mb-4 block">
+                <span className="mb-2 block text-xs font-semibold uppercase tracking-[0.24em] text-[#a1a1aa]">Search entries</span>
+                <input
+                  type="text"
+                  value={searchQuery}
+                  onChange={(event) => setSearchQuery(event.target.value)}
+                  placeholder="Search mood, title, or words..."
+                  className="w-full rounded-2xl border border-[#303036] bg-[#17181b] px-3 py-3 text-white outline-none placeholder:text-[#6b7280] focus:border-[#8b5cf6]"
+                />
+              </label>
+
               <div className="space-y-4">
-                {selectedEntries.length === 0 ? (
+                {filteredEntries.length === 0 ? (
                   <div className="rounded-[1.5rem] border border-dashed border-[#303036] bg-[#17181b] p-5 text-sm text-[#d4d4d8]">
-                    No entries yet for this day.
+                    No entries match this vibe today.
                   </div>
                 ) : (
-                  selectedEntries.map((entry) => (
+                  filteredEntries.map((entry) => (
                     <article key={entry.id} className="rounded-[1.5rem] border border-[#303036] bg-[#17181b] p-4">
                       <div className="mb-3 flex items-center justify-between gap-2">
                         <span className={`rounded-full border px-2.5 py-1 text-[10px] font-semibold uppercase tracking-[0.2em] ${moodPalette[entry.mood]}`}>
@@ -183,6 +236,23 @@ export function DiaryHomePage({
                       {entry.image ? (
                         <img src={entry.image} alt={entry.title} className="mt-4 h-52 w-full rounded-[1.2rem] object-cover" />
                       ) : null}
+
+                      <div className="mt-4 flex justify-end gap-2">
+                        <button
+                          type="button"
+                          onClick={() => onEditEntry(entry)}
+                          className="rounded-full border border-[#303036] bg-[#17181b] px-3 py-2 text-xs font-semibold uppercase tracking-[0.2em] text-[#e5e7eb]"
+                        >
+                          Edit
+                        </button>
+                        <button
+                          type="button"
+                          onClick={() => onDeleteEntry(entry.id)}
+                          className="rounded-full border border-red-500/40 bg-red-500/10 px-3 py-2 text-xs font-semibold uppercase tracking-[0.2em] text-red-200"
+                        >
+                          Delete
+                        </button>
+                      </div>
                     </article>
                   ))
                 )}

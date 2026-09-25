@@ -11,6 +11,18 @@ const goTo = (path: string) => {
   window.location.assign(path);
 };
 
+const exportEntries = (entries: DiaryEntry[]) => {
+  const blob = new Blob([JSON.stringify(entries, null, 2)], {
+    type: "application/json",
+  });
+  const url = URL.createObjectURL(blob);
+  const link = document.createElement("a");
+  link.href = url;
+  link.download = "konke-diary-export.json";
+  link.click();
+  URL.revokeObjectURL(url);
+};
+
 export default function App() {
   const [entries, setEntries] = useState<DiaryEntry[]>([]);
   const [selectedDate, setSelectedDate] = useState(dateKey(new Date()));
@@ -38,12 +50,24 @@ export default function App() {
   }, [entries]);
 
   const handleSaveEntry = (entry: DiaryEntry) => {
-    setEntries((current) => [entry, ...current]);
+    setEntries((current) => {
+      const existingIndex = current.findIndex((item) => item.id === entry.id);
+      if (existingIndex >= 0) {
+        return current.map((item) => (item.id === entry.id ? entry : item));
+      }
+      return [entry, ...current];
+    });
     setSelectedDate(entry.date);
     goTo("/diary/home");
   };
 
+  const handleDeleteEntry = (entryId: string) => {
+    setEntries((current) => current.filter((item) => item.id !== entryId));
+  };
+
   const pathname = window.location.pathname;
+  const editId = new URLSearchParams(window.location.search).get("edit") ?? undefined;
+  const editingEntry = entries.find((entry) => entry.id === editId);
 
   if (pathname === "/auth") {
     return <AuthPage goTo={goTo} />;
@@ -53,6 +77,7 @@ export default function App() {
     return (
       <NewEntryPage
         initialDate={selectedDate}
+        existingEntry={editingEntry}
         onSave={handleSaveEntry}
         goTo={goTo}
       />
@@ -68,6 +93,9 @@ export default function App() {
         calendarMonth={calendarMonth}
         setCalendarMonth={setCalendarMonth}
         goTo={goTo}
+        onDeleteEntry={handleDeleteEntry}
+        onEditEntry={(entry) => goTo(`/diary/new-entry?edit=${entry.id}`)}
+        onExport={() => exportEntries(entries)}
       />
     );
   }
