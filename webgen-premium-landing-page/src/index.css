@@ -1,0 +1,134 @@
+@import "tailwindcss";
+
+@theme {
+  --font-sans: "Inter", ui-sans-serif, system-ui, sans-serif;
+  --font-display: "Sora", "Inter", ui-sans-serif, system-ui, sans-serif;
+}
+
+html {
+  scroll-behavior: smooth;
+}
+
+body {
+  margin: 0;
+  min-width: 320px;
+  background:
+    radial-gradient(circle at top, rgba(214, 170, 132, 0.35), transparent 30%),
+    linear-gradient(135deg, #f9f3eb 0%, #f1e3d4 52%, #f7efe8 100%);
+  color: #2f241f;
+  font-family: var(--font-sans);
+  -webkit-font-smoothing: antialiased;
+  text-rendering: optimizeLegibility;
+}
+
+* {
+  box-sizing: border-box;
+}
+
+::selection {
+  background: rgba(140, 97, 73, 0.22);
+  color: #2d201d;
+}
+
+.font-display {
+  font-family: var(--font-display);
+}
+
+.diary-shell {
+  position: relative;
+  overflow: hidden;
+}
+
+.diary-shell::before,
+.diary-shell::after {
+  content: "";
+  position: absolute;
+  border-radius: 9999px;
+  filter: blur(70px);
+  opacity: 0.55;
+  pointer-events: none;
+}
+
+.diary-shell::before {
+  top: -60px;
+  right: -30px;
+  width: 260px;
+  height: 260px;
+  background: rgba(222, 170, 131, 0.4);
+}
+
+.diary-shell::after {
+  bottom: 20px;
+  left: -40px;
+  width: 220px;
+  height: 220px;
+  background: rgba(177, 194, 181, 0.38);
+}
+
+.journal-hero {
+  position: relative;
+  overflow: hidden;
+}
+
+.journal-hero::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background-image:
+    linear-gradient(rgba(120, 88, 67, 0.04) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(120, 88, 67, 0.04) 1px, transparent 1px);
+  background-size: 32px 32px;
+  mask-image: radial-gradient(circle at center, black 45%, transparent 100%);
+}
+
+.entry-card {
+  transition:
+    transform 0.25s ease,
+    box-shadow 0.25s ease,
+    border-color 0.25s ease;
+}
+
+.entry-card:hover {
+  transform: translateY(-4px);
+  box-shadow: 0 18px 36px rgba(83, 63, 49, 0.08);
+  border-color: rgba(164, 122, 93, 0.25);
+}
+
+@media (max-width: 640px) {
+  .journal-hero {
+    padding: 1.25rem;
+  }
+}
+
+/* ---------- Button shine ---------- */
+.btn-shine {
+  position: relative;
+  overflow: hidden;
+}
+.btn-shine::after {
+  content: "";
+  position: absolute;
+  top: 0;
+  left: -80%;
+  width: 50%;
+  height: 100%;
+  background: linear-gradient(
+    100deg,
+    transparent,
+    rgba(255, 255, 255, 0.35),
+    transparent
+  );
+  transform: skewX(-20deg);
+  transition: left 0.6s ease;
+}
+.btn-shine:hover::after {
+  left: 130%;
+}
+
+/* focus visibility */
+a:focus-visible,
+button:focus-visible {
+  outline: 2px solid var(--color-brand-400);
+  outline-offset: 3px;
+  border-radius: 6px;
+}
