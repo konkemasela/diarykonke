@@ -1,4 +1,5 @@
-import { buildCalendarDays, dateKey, formatDisplayDate, moodPalette, monthName, moodOptions, type DiaryEntry, type Mood } from "../diary";
+import { useNavigate } from "react-router-dom";
+import { buildCalendarDays, dateKey, formatDisplayDate, moodPalette, monthName, moodOptions, type DiaryEntry } from "../diary";
 
 export function DiaryHomePage({
   entries,
@@ -6,17 +7,14 @@ export function DiaryHomePage({
   setSelectedDate,
   calendarMonth,
   setCalendarMonth,
-  onNewEntry,
-  onLock,
 }: {
   entries: DiaryEntry[];
   selectedDate: string;
   setSelectedDate: (date: string) => void;
   calendarMonth: Date;
   setCalendarMonth: (date: Date) => void;
-  onNewEntry: () => void;
-  onLock: () => void;
 }) {
+  const navigate = useNavigate();
   const selectedEntries = [...entries]
     .filter((entry) => entry.date === selectedDate)
     .sort((a, b) => b.createdAt.localeCompare(a.createdAt));
@@ -61,7 +59,7 @@ export function DiaryHomePage({
             </span>
             <button
               type="button"
-              onClick={onLock}
+              onClick={() => navigate("/auth")}
               className="rounded-full border border-[#303036] bg-[#17181b] px-3 py-2 text-sm text-[#e5e7eb]"
             >
               Lock the crib
@@ -155,7 +153,7 @@ export function DiaryHomePage({
 
                 <button
                   type="button"
-                  onClick={onNewEntry}
+                  onClick={() => navigate("/new-entry")}
                   className="rounded-full bg-[#f5f5f5] px-5 py-3 text-sm font-semibold text-[#111214] transition hover:bg-white"
                 >
                   New entry

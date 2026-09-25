@@ -1,9 +1,11 @@
 import { useState } from "react";
+import { useNavigate } from "react-router-dom";
 
 const PIN = "55055";
 const USER_NAME = "Konke'okuhle Masela";
 
-export function AuthPage({ onUnlock }: { onUnlock: () => void }) {
+export function AuthPage() {
+  const navigate = useNavigate();
   const [pinInput, setPinInput] = useState("");
   const [pinError, setPinError] = useState("");
 
@@ -12,7 +14,7 @@ export function AuthPage({ onUnlock }: { onUnlock: () => void }) {
 
     if (pinInput === PIN) {
       setPinError("");
-      onUnlock();
+      navigate("/home");
       return;
     }
 

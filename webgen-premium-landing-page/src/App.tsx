@@ -1,4 +1,5 @@
 import { useEffect, useState } from "react";
+import { BrowserRouter, Navigate, Route, Routes } from "react-router-dom";
 import { AuthPage } from "./pages/AuthPage";
 import { DiaryHomePage } from "./pages/DiaryHomePage";
 import { NewEntryPage } from "./pages/NewEntryPage";
@@ -7,7 +8,6 @@ import { createSampleEntries, dateKey, type DiaryEntry } from "./diary";
 const STORAGE_KEY = "global_saving_diary_entries";
 
 export default function App() {
-  const [page, setPage] = useState<"auth" | "home" | "new-entry">("auth");
   const [entries, setEntries] = useState<DiaryEntry[]>([]);
   const [selectedDate, setSelectedDate] = useState(dateKey(new Date()));
   const [calendarMonth, setCalendarMonth] = useState(new Date());
@@ -36,32 +36,35 @@ export default function App() {
   const handleSaveEntry = (entry: DiaryEntry) => {
     setEntries((current) => [entry, ...current]);
     setSelectedDate(entry.date);
-    setPage("home");
   };
 
-  if (page === "auth") {
-    return <AuthPage onUnlock={() => setPage("home")} />;
-  }
-
-  if (page === "new-entry") {
-    return (
-      <NewEntryPage
-        initialDate={selectedDate}
-        onSave={handleSaveEntry}
-        onBack={() => setPage("home")}
-      />
-    );
-  }
-
   return (
-    <DiaryHomePage
-      entries={entries}
-      selectedDate={selectedDate}
-      setSelectedDate={setSelectedDate}
-      calendarMonth={calendarMonth}
-      setCalendarMonth={setCalendarMonth}
-      onNewEntry={() => setPage("new-entry")}
-      onLock={() => setPage("auth")}
-    />
+    <BrowserRouter>
+      <Routes>
+        <Route path="/" element={<Navigate to="/auth" replace />} />
+        <Route path="/auth" element={<AuthPage />} />
+        <Route
+          path="/home"
+          element={
+            <DiaryHomePage
+              entries={entries}
+              selectedDate={selectedDate}
+              setSelectedDate={setSelectedDate}
+              calendarMonth={calendarMonth}
+              setCalendarMonth={setCalendarMonth}
+            />
+          }
+        />
+        <Route
+          path="/new-entry"
+          element={
+            <NewEntryPage
+              initialDate={selectedDate}
+              onSave={handleSaveEntry}
+            />
+          }
+        />
+      </Routes>
+    </BrowserRouter>
   );
 }
