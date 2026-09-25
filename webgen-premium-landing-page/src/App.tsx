@@ -12,13 +12,23 @@ const goTo = (path: string) => {
 };
 
 const exportEntries = (entries: DiaryEntry[]) => {
-  const blob = new Blob([JSON.stringify(entries, null, 2)], {
+  const payload = {
+    appName: "Konke Diary",
+    exportVersion: 1,
+    exportedAt: new Date().toISOString(),
+    totalEntries: entries.length,
+    entries: [...entries].sort(
+      (a, b) => new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime(),
+    ),
+  };
+
+  const blob = new Blob([JSON.stringify(payload, null, 2)], {
     type: "application/json",
   });
   const url = URL.createObjectURL(blob);
   const link = document.createElement("a");
   link.href = url;
-  link.download = "konke-diary-export.json";
+  link.download = "konke-diary-all-entries-export.json";
   link.click();
   URL.revokeObjectURL(url);
 };

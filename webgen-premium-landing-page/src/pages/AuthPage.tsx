@@ -20,10 +20,10 @@ export function AuthPage({ goTo }: { goTo: (path: string) => void }) {
   };
 
   return (
-    <div className="flex min-h-screen items-center justify-center bg-[radial-gradient(circle_at_top,#0d0d0f,#050505_48%,#0b0b0d)] p-6">
-      <div className="w-full max-w-md rounded-[2rem] border border-[#2a2a2d] bg-[#111214]/90 p-8 shadow-[0_30px_80px_rgba(0,0,0,0.5)] backdrop-blur-sm">
-        <p className="text-center text-[10px] font-semibold uppercase tracking-[0.38em] text-[#a1a1aa]">
-          Konke's Diary
+    <div className="diary-shell flex min-h-screen items-center justify-center bg-[radial-gradient(circle_at_top,#0d0d0f,#050505_48%,#0b0b0d)] p-6">
+      <div className="w-full max-w-md rounded-[2rem] border border-[#2f2a2d] bg-[rgba(17,18,20,0.9)] p-8 shadow-[0_30px_80px_rgba(0,0,0,0.56)] backdrop-blur-sm">
+        <p className="text-center text-[10px] font-semibold uppercase tracking-[0.38em] text-[var(--brand-gold)]">
+          KONKE
         </p>
         <h1 className="mt-4 text-center text-3xl font-semibold text-white">Daily Diary</h1>
         <p className="mt-3 text-center text-sm text-[#d4d4d8]">Wazzup, {USER_NAME}</p>
@@ -48,7 +48,7 @@ export function AuthPage({ goTo }: { goTo: (path: string) => void }) {
 
           <button
             type="submit"
-            className="w-full rounded-full bg-[#f5f5f5] px-4 py-3 text-sm font-semibold text-[#111214] transition hover:bg-white"
+            className="btn-shine w-full rounded-full bg-[linear-gradient(135deg,#f8d98f_0%,#f4b1c8_45%,#b99cff_100%)] px-4 py-3 text-sm font-semibold text-[#111214] shadow-[0_14px_28px_rgba(185,156,255,0.32)] transition hover:brightness-110"
           >
             Get In the Crib
           </button>

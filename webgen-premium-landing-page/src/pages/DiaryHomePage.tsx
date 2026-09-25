@@ -66,11 +66,11 @@ export function DiaryHomePage({
   })();
 
   return (
-    <div className="min-h-screen bg-[radial-gradient(circle_at_top,#121316,#09090b_46%,#040404)] text-white">
+    <div className="diary-shell min-h-screen bg-[radial-gradient(circle_at_top,#121316,#09090b_46%,#040404)] text-white">
       <div className="mx-auto max-w-7xl px-4 py-6 sm:px-6 lg:px-8">
-        <header className="mb-6 flex flex-col gap-4 rounded-[2rem] border border-[#2a2a2d] bg-[#111214]/80 p-4 shadow-[0_20px_60px_rgba(0,0,0,0.45)] backdrop-blur-md sm:flex-row sm:items-center sm:justify-between">
+        <header className="journal-hero mb-6 flex flex-col gap-4 rounded-[2rem] border border-[#2a2a2d] bg-[linear-gradient(135deg,rgba(17,18,20,0.96),rgba(24,24,28,0.9))] p-4 shadow-[0_20px_60px_rgba(0,0,0,0.45)] backdrop-blur-md sm:flex-row sm:items-center sm:justify-between">
           <div>
-            <p className="text-[10px] font-semibold uppercase tracking-[0.32em] text-[#a1a1aa]">KONKE</p>
+            <p className="text-[10px] font-semibold uppercase tracking-[0.32em] text-[var(--brand-gold)]">KONKE</p>
             <h1 className="mt-2 text-2xl font-semibold text-white">Konke'okuhle Masela</h1>
           </div>
 
@@ -81,7 +81,7 @@ export function DiaryHomePage({
             <button
               type="button"
               onClick={() => goTo("/auth")}
-              className="rounded-full border border-[#303036] bg-[#17181b] px-3 py-2 text-sm text-[#e5e7eb]"
+              className="btn-shine rounded-full border border-[#303036] bg-[#17181b] px-3 py-2 text-sm text-[#e5e7eb] transition hover:border-[var(--brand-gold)] hover:text-white"
             >
               Lock the crib
             </button>
@@ -188,14 +188,14 @@ export function DiaryHomePage({
                   <button
                     type="button"
                     onClick={onExport}
-                    className="rounded-full border border-[#303036] bg-[#17181b] px-4 py-2 text-sm font-semibold text-[#e5e7eb]"
+                    className="btn-shine rounded-full border border-[#303036] bg-[#17181b] px-4 py-2 text-sm font-semibold text-[#e5e7eb] transition hover:border-[var(--brand-gold)] hover:text-white"
                   >
-                    Export
+                    Export all
                   </button>
                   <button
                     type="button"
                     onClick={() => goTo("/diary/new-entry")}
-                    className="rounded-full bg-[#f5f5f5] px-5 py-3 text-sm font-semibold text-[#111214] transition hover:bg-white"
+                    className="btn-shine rounded-full bg-[linear-gradient(135deg,#f8d98f_0%,#f4b1c8_45%,#b99cff_100%)] px-5 py-3 text-sm font-semibold text-[#111214] shadow-[0_15px_30px_rgba(185,156,255,0.28)] transition hover:brightness-110"
                   >
                     New entry
                   </button>
@@ -220,7 +220,7 @@ export function DiaryHomePage({
                   </div>
                 ) : (
                   filteredEntries.map((entry) => (
-                    <article key={entry.id} className="rounded-[1.5rem] border border-[#303036] bg-[#17181b] p-4">
+                    <article key={entry.id} className="entry-card rounded-[1.5rem] border border-[#303036] bg-[#17181b] p-4">
                       <div className="mb-3 flex items-center justify-between gap-2">
                         <span className={`rounded-full border px-2.5 py-1 text-[10px] font-semibold uppercase tracking-[0.2em] ${moodPalette[entry.mood]}`}>
                           {entry.mood}

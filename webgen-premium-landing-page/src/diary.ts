@@ -13,13 +13,13 @@ export type DiaryEntry = {
 export const moodOptions: Mood[] = ["Happy", "Calm", "Reflective", "Grateful", "Sad", "Excited", "Tired"];
 
 export const moodPalette: Record<Mood, string> = {
-  Happy: "bg-amber-500/10 text-amber-200 border-amber-400/30",
-  Calm: "bg-sky-500/10 text-sky-200 border-sky-400/30",
-  Reflective: "bg-violet-500/10 text-violet-200 border-violet-400/30",
-  Grateful: "bg-emerald-500/10 text-emerald-200 border-emerald-400/30",
-  Sad: "bg-slate-500/10 text-slate-200 border-slate-400/30",
-  Excited: "bg-pink-500/10 text-pink-200 border-pink-400/30",
-  Tired: "bg-stone-500/10 text-stone-200 border-stone-400/30",
+  Happy: "bg-amber-400/15 text-amber-100 border-amber-300/40 shadow-[0_0_0_1px_rgba(251,191,36,0.12)]",
+  Calm: "bg-sky-400/15 text-sky-100 border-sky-300/40 shadow-[0_0_0_1px_rgba(96,165,250,0.12)]",
+  Reflective: "bg-violet-400/15 text-violet-100 border-violet-300/40 shadow-[0_0_0_1px_rgba(167,139,250,0.12)]",
+  Grateful: "bg-emerald-400/15 text-emerald-100 border-emerald-300/40 shadow-[0_0_0_1px_rgba(52,211,153,0.12)]",
+  Sad: "bg-slate-400/15 text-slate-100 border-slate-300/40 shadow-[0_0_0_1px_rgba(148,163,184,0.12)]",
+  Excited: "bg-pink-400/15 text-pink-100 border-pink-300/40 shadow-[0_0_0_1px_rgba(244,114,182,0.12)]",
+  Tired: "bg-stone-400/15 text-stone-100 border-stone-300/40 shadow-[0_0_0_1px_rgba(214,211,209,0.12)]",
 };
 
 export const dateKey = (date: Date) => {
